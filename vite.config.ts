@@ -1,12 +1,22 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
+import styleImport from 'vite-plugin-style-import';
 import { join } from 'path';
 export default defineConfig(() => {
   return {
     plugins: [
       vue(), // 开启 Vue 支持
-      vueJsx()
+      vueJsx(),
+      styleImport({
+        libs: [
+          {
+            libraryName: 'vant',
+            esModule: true,
+            resolveStyle: (name) => `vant/es/${name}/style`
+          }
+        ]
+      })
     ],
     resolve: {
       alias: {
