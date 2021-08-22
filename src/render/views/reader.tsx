@@ -115,7 +115,10 @@ export default defineComponent({
       }
     };
     const jumpChapter = async (cid) => {
-      // console.log(cid)
+      state.showCatalog = false;
+      state.showTopPopup = false;
+      state.showBottomPopup = false;
+      state.title = '';
       state.cid = cid;
       await fetchContent(cid);
       router.replace({
