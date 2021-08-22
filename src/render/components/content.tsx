@@ -24,7 +24,9 @@ export default defineComponent({
   },
   render() {
     return (
-      <PullRefresh
+      /* global PerfectScrollbar  */
+
+      <PerfectScrollbar
         style={{
           width: '100vw',
           height: '100vh',
@@ -70,7 +72,7 @@ export default defineComponent({
             </div>
           ))}
         </div>
-      </PullRefresh>
+      </PerfectScrollbar>
     );
   }
 });

@@ -101,9 +101,16 @@ export default defineComponent({
     };
     const popupHandler = () => {
       console.log('背景点击事件-->', state.showCatalog);
+      const selection = window.getSelection();
+      if (!selection?.isCollapsed) {
+        return;
+      }
       if (!state.showBottomPopup) {
         state.showBottomPopup = true;
         state.showTopPopup = true;
+      } else {
+        state.showBottomPopup = false;
+        state.showTopPopup = false;
       }
     };
     const jumpChapter = async (cid) => {
@@ -140,8 +147,11 @@ export default defineComponent({
   },
   render() {
     return (
+      /* global PerfectScrollbar  */
       <div class={styles.page} style={this.pageStyle} onClick={this.popupHandler}>
-        <Content title={this.state.title} content={this.state.content} />
+        {this.state.title.length === 0 ? null : (
+          <Content title={this.state.title} content={this.state.content} />
+        )}
         <Popup
           show={this.state.showTopPopup}
           overlay={false}
@@ -205,7 +215,7 @@ export default defineComponent({
           class={styles.catalogPopup}
         >
           <div class={styles.bookName}>{this.state.bookName}</div>
-          <div class={styles.cataWrapper}>
+          <PerfectScrollbar class={styles.cataWrapper}>
             {this.state.chapters.map((cata: any) => (
               <div
                 onClick={() => this.jumpChapter(cata.chapter_id)}
@@ -217,7 +227,7 @@ export default defineComponent({
                 {cata.chapter_title}
               </div>
             ))}
-          </div>
+          </PerfectScrollbar>
         </Popup>
       </div>
     );
