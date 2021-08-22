@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, reactive } from 'vue';
-import { Popup, Icon } from 'vant';
+import { Popup, Icon, Loading } from 'vant';
 import Content from '@/components/Content';
 import themeConfig from '@/plugins/themes';
 
@@ -19,7 +19,8 @@ export default defineComponent({
   components: {
     Content,
     [Popup.name]: Popup,
-    [Icon.name]: Icon
+    [Icon.name]: Icon,
+    [Loading.name]: Loading
   },
   setup() {
     const router = useRouter();
@@ -85,7 +86,7 @@ export default defineComponent({
       await getChapters(state.bid);
       fetchContent(state.cid);
     });
-    const getChapters = async (book_id) => {
+    const getChapters = async (book_id: any) => {
       const res: any = await getDivisionList(book_id);
       const divisions = res.division_list;
       for (let i = 0; i < divisions.length; i++) {
@@ -149,7 +150,19 @@ export default defineComponent({
     return (
       /* global PerfectScrollbar  */
       <div class={styles.page} style={this.pageStyle} onClick={this.popupHandler}>
-        {this.state.title.length === 0 ? null : (
+        {this.state.title.length === 0 ? (
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Loading color="#997b5f" size="48" />
+          </div>
+        ) : (
           <Content title={this.state.title} content={this.state.content} />
         )}
         <Popup
@@ -198,6 +211,9 @@ export default defineComponent({
           </div>
         </Popup>
         <Popup
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
           onClick-overlay={(event) => {
             event.stopPropagation();
             this.state.showCatalog = false;

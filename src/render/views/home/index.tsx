@@ -42,7 +42,7 @@ export default defineComponent({
             to="/shelf"
             name="Shelf"
             v-slots={{
-              icon: (props) => <img src={props.active ? state.booksFilled : state.books} />
+              icon: (props: any) => <img src={props.active ? state.booksFilled : state.books} />
             }}
           ></van-tabbar-item>
           <van-tabbar-item
@@ -50,7 +50,7 @@ export default defineComponent({
             to="/rank"
             name="Rank"
             v-slots={{
-              icon: (props) => <img src={props.active ? state.ranksFilled : state.ranks} />
+              icon: (props: any) => <img src={props.active ? state.ranksFilled : state.ranks} />
             }}
           ></van-tabbar-item>
           <van-tabbar-item
@@ -58,7 +58,7 @@ export default defineComponent({
             to="/user"
             name="User"
             v-slots={{
-              icon: (props) => <img src={props.active ? state.mineFilled : state.mine} />
+              icon: (props: any) => <img src={props.active ? state.mineFilled : state.mine} />
             }}
           ></van-tabbar-item>
         </van-tabbar>
