@@ -7,6 +7,14 @@ import { useRoute, useRouter } from 'vue-router';
 import styles from '@/style/reader.module.scss';
 import { getChapterByDivisionId, getContent, getDivisionList } from '@/api';
 
+import arrowLeftIcon from '@/assets/imgs/arrow_left.png';
+import arrowRightIcon from '@/assets/imgs/arrow_right.png';
+import vipIcon from '@/assets/imgs/lock.png';
+import menuIcon from '@/assets/imgs/menu.png';
+import moonIcon from '@/assets/imgs/moon.png';
+import bookmarkIcon from '@/assets/imgs/bookmark.png';
+import readerSettingsIcon from '@/assets/imgs/read_settings.png';
+
 export default defineComponent({
   components: {
     Content,
@@ -25,9 +33,19 @@ export default defineComponent({
       content: '',
       bookName: '',
       chapters: [],
-      showPopup: false,
+      showTopPopup: false,
+      showBottomPopup: false,
       showCatalog: false
     });
+    const icons = {
+      arrowLeftIcon,
+      arrowRightIcon,
+      vipIcon,
+      menuIcon,
+      moonIcon,
+      bookmarkIcon,
+      readerSettingsIcon
+    };
     const pageStyle = reactive({
       width: '100vw',
       height: '100vh',
@@ -39,6 +57,19 @@ export default defineComponent({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      background: themeConfig.themes[1].content
+    });
+
+    const bottomBarStyle = reactive({
+      height: 'auto',
+      background: themeConfig.themes[1].content
+    });
+
+    const leftBarStyle = reactive({
+      width: '75%',
+      height: '100%',
+      padding: '20px 0',
+      boxSizing: 'border-box',
       background: themeConfig.themes[1].content
     });
     const goBack = () => {
@@ -60,7 +91,7 @@ export default defineComponent({
       for (let i = 0; i < divisions.length; i++) {
         const did = divisions[i].division_id;
         const res = (await getChapterByDivisionId(did)) as any;
-        state.chapters.concat(res.chapter_list);
+        state.chapters = state.chapters.concat(res.chapter_list);
       }
     };
     const fetchContent = async (cid) => {
@@ -70,18 +101,49 @@ export default defineComponent({
     };
     const popupHandler = () => {
       console.log('背景点击事件-->', state.showCatalog);
-      if (!state.showCatalog) {
-        state.showPopup = !state.showPopup;
+      if (!state.showBottomPopup) {
+        state.showBottomPopup = true;
+        state.showTopPopup = true;
       }
     };
-    return { state, pageStyle, topBarStyle, popupHandler, goBack };
+    const jumpChapter = async (cid) => {
+      // console.log(cid)
+      state.cid = cid;
+      await fetchContent(cid);
+      router.replace({
+        name: 'Reader',
+        query: {
+          bid: state.bid,
+          cid
+        },
+        params: {
+          bookName: state.bookName
+        }
+      });
+    };
+    const showCatalog = () => {
+      state.showCatalog = true;
+      // popBars = false
+    };
+    return {
+      state,
+      icons,
+      pageStyle,
+      topBarStyle,
+      bottomBarStyle,
+      leftBarStyle,
+      popupHandler,
+      goBack,
+      jumpChapter,
+      showCatalog
+    };
   },
   render() {
     return (
       <div class={styles.page} style={this.pageStyle} onClick={this.popupHandler}>
         <Content title={this.state.title} content={this.state.content} />
         <Popup
-          show={this.state.showPopup}
+          show={this.state.showTopPopup}
           overlay={false}
           position="top"
           duration="0.15"
@@ -93,6 +155,69 @@ export default defineComponent({
           </div>
           <div class={styles.title}>{this.state.bookName}</div>
           <div class={styles.actionIcon}></div>
+        </Popup>
+        <Popup
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+          show={this.state.showBottomPopup}
+          overlay={false}
+          position="bottom"
+          duration="0.15"
+          style={this.bottomBarStyle}
+          class={styles.bottomPopup}
+        >
+          <div class={styles.firstLine}>
+            <img src={this.icons.arrowLeftIcon} alt="" class={[styles.arrow, styles.arrowLeft]} />
+            <div class={styles.vipDesc}>
+              <img src={this.icons.vipIcon} alt="" class={styles.descIcon} />
+              <div class={styles.descText}>5523 人订阅</div>
+            </div>
+            <img src={this.icons.arrowRightIcon} alt="" class={[styles.arrow, styles.right]} />
+          </div>
+          <div class={styles.secLine}>
+            <img src={this.icons.menuIcon} class={styles.icon} alt="" onClick={this.showCatalog} />
+            <div class={styles.readDesc}> 已读 56% </div>
+            <img src={this.icons.moonIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
+            <img src={this.icons.bookmarkIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
+            <img
+              src={this.icons.readerSettingsIcon}
+              class={[styles.icon, styles.iconMLeft]}
+              alt=""
+            />
+          </div>
+        </Popup>
+        <Popup
+          onClick-overlay={(event) => {
+            event.stopPropagation();
+            this.state.showCatalog = false;
+          }}
+          onClosed={() => {
+            console.log('closed!');
+            this.state.showTopPopup = false;
+            this.state.showBottomPopup = false;
+          }}
+          show={this.state.showCatalog}
+          overlay={true}
+          position="left"
+          duration="0.15"
+          style={this.leftBarStyle}
+          class={styles.catalogPopup}
+        >
+          <div class={styles.bookName}>{this.state.bookName}</div>
+          <div class={styles.cataWrapper}>
+            {this.state.chapters.map((cata: any) => (
+              <div
+                onClick={() => this.jumpChapter(cata.chapter_id)}
+                class={[
+                  styles.cata,
+                  cata.chapter_id === this.state.cid ? styles.cataSelected : null
+                ]}
+              >
+                {cata.chapter_title}
+              </div>
+            ))}
+          </div>
         </Popup>
       </div>
     );

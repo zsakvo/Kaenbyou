@@ -3,6 +3,7 @@ import App from './App';
 import router from './router';
 import store from './store';
 import '@/style/index.scss';
+import '@vant/touch-emulator';
 
 window.$store = store;
 
