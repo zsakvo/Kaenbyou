@@ -1,0 +1,99 @@
+.page {
+  .top-popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .back-icon {
+      width: 42px;
+      height: 100%;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .title {
+      flex: 1;
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--van-gray-8);
+    }
+    .action-icon {
+      width: 42px;
+      height: 42px;
+    }
+  }
+  .bottom-popup {
+    display: flex;
+    flex-direction: column;
+    .first-line {
+      display: flex;
+      margin: 4px 14px;
+      align-items: center;
+      .arrow {
+        width: 20px;
+        height: 20px;
+      }
+      .vip-desc {
+        flex: 1;
+        height: 28px;
+        border-radius: 30px;
+        margin: 8px 14px;
+        display: flex;
+        align-items: center;
+        background-color: #f3deb0;
+        padding: 0 14px;
+        .desc-icon {
+          width: 0;
+          height: 0;
+        }
+        .desc-text {
+          font-size: 12px;
+          color: var(--van-gray-7);
+        }
+      }
+    }
+    .sec-line {
+      margin: 16px 14px;
+      display: flex;
+      align-items: center;
+      .icon {
+        width: 20px;
+        height: 20px;
+      }
+      .read-desc {
+        flex: 1;
+        margin: 0 14px;
+        color: var(--van-gray-7);
+        font-size: 14px;
+      }
+      .icon-m-left {
+        margin-left: 18px;
+      }
+    }
+  }
+
+  .catalog-popup {
+    .book-name {
+      margin: 0 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--van-gray-8);
+    }
+    .cata-wrapper {
+      margin: 16px 0;
+      padding: 0 20px;
+      height: calc(100vh - 60px);
+      overflow: auto;
+      .cata {
+        padding: 10px 0;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--van-gray-7);
+      }
+      .cata-selected {
+        color: #cc5858;
+      }
+    }
+  }
+}

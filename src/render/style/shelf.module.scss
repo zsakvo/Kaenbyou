@@ -1,0 +1,51 @@
+.page {
+  padding-top: 48px;
+  .tool-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid var(--van-gray-1);
+    height: 48px;
+    display: flex;
+    .title {
+      padding: 0 18px;
+      line-height: 48px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+  }
+  .pull-wrapper {
+    height: calc(86vh - 0px);
+    .book-card {
+      margin: 18px 18px;
+      display: flex;
+      .cover {
+        width: 60px;
+        height: 80px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 16px;
+        justify-content: center;
+        .name {
+          font-size: 14px;
+          color: var(--van-gray-8);
+          font-weight: bold;
+          margin-bottom: 8px;
+        }
+        .author,
+        .new {
+          margin: 4px 0;
+          color: var(--van-gray-7);
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

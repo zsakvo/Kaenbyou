@@ -33,7 +33,12 @@ export default defineConfig(() => {
       outDir: join(__dirname, './dist/render'),
       assetsDir: './assets', // 相对路径 加载问题
       emptyOutDir: true
-    }
+    },
     // 其他配置略...
+    css: {
+      modules: {
+        localsConvention: 'camelCaseOnly'
+      }
+    }
   };
 });
