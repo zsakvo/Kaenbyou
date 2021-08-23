@@ -36,7 +36,9 @@ export default defineComponent({
       chapters: [],
       showTopPopup: false,
       showBottomPopup: false,
-      showCatalog: false
+      showCatalog: false,
+      canPopup: true,
+      canSelect: true
     });
     const icons = {
       arrowLeftIcon,
@@ -86,6 +88,14 @@ export default defineComponent({
       await getChapters(state.bid);
       fetchContent(state.cid);
     });
+    // watch(state, (newValue, oldValue) => {
+    //   console.log('The new counter value is: ' + newValue, oldValue);
+    //   if (newValue.canPopup) {
+    //     state.canSelect = false;
+    //   } else {
+    //     state.canSelect = true;
+    //   }
+    // });
     const getChapters = async (book_id: any) => {
       const res: any = await getDivisionList(book_id);
       const divisions = res.division_list;
@@ -99,19 +109,26 @@ export default defineComponent({
       const res = await getContent(cid);
       state.title = res.chapter_info.chapter_title;
       state.content = res.chapter_info.txt_content;
+      state.canSelect = true;
     };
     const popupHandler = () => {
-      console.log('背景点击事件-->', state.showCatalog);
-      const selection = window.getSelection();
-      if (!selection?.isCollapsed) {
+      const lastCanPopup = state.canPopup;
+      const selection = window.getSelection()!.toString();
+      state.canPopup = selection.length === 0;
+      if (!lastCanPopup) {
+        return;
+      }
+      if (!state.showBottomPopup && !state.canPopup) {
         return;
       }
       if (!state.showBottomPopup) {
         state.showBottomPopup = true;
         state.showTopPopup = true;
+        state.canSelect = false;
       } else {
         state.showBottomPopup = false;
         state.showTopPopup = false;
+        state.canSelect = true;
       }
     };
     const jumpChapter = async (cid) => {
@@ -153,6 +170,15 @@ export default defineComponent({
     return (
       /* global PerfectScrollbar  */
       <div class={styles.page} style={this.pageStyle} onClick={this.popupHandler}>
+        <div
+          class={styles.topInfo}
+          style={{
+            background: themeConfig.themes[1].body,
+            color: '#978042'
+          }}
+        >
+          001·无辜的墙壁
+        </div>
         {this.state.title.length === 0 ? (
           <div
             style={{
@@ -166,7 +192,11 @@ export default defineComponent({
             <Loading color="#997b5f" size="48" />
           </div>
         ) : (
-          <Content title={this.state.title} content={this.state.content} />
+          <Content
+            title={this.state.title}
+            content={this.state.content}
+            canSelect={this.state.canSelect}
+          />
         )}
         <Popup
           show={this.state.showTopPopup}

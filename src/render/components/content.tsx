@@ -14,6 +14,10 @@ export default defineComponent({
     content: {
       type: String,
       default: ''
+    },
+    canSelect: {
+      type: Boolean,
+      default: true
     }
   },
   setup() {
@@ -32,7 +36,8 @@ export default defineComponent({
           height: '100vh',
           overflow: 'auto',
           boxSizing: 'border-box',
-          padding: '60px 24px'
+          padding: '60px 24px',
+          userSelect: this.canSelect ? 'auto' : 'none'
         }}
         headHeight="64"
         modelValue={this.state.refreshing}
