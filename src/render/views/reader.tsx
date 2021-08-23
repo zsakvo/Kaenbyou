@@ -177,7 +177,16 @@ export default defineComponent({
             color: '#978042'
           }}
         >
-          001·无辜的墙壁
+          {this.state.title}
+        </div>
+        <div
+          class={styles.bottomInfo}
+          style={{
+            background: themeConfig.themes[1].body,
+            color: '#978042'
+          }}
+        >
+          {this.state.title}
         </div>
         {this.state.title.length === 0 ? (
           <div
