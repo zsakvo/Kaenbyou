@@ -48,6 +48,7 @@ export default defineComponent({
       } else {
         state.shelfBooks.concat(res.book_list);
       }
+      electron.ipcRenderer.send('setShelfBooks', toRaw(state.shelfId), toRaw(state.shelfBooks));
     };
 
     const toReader = (book: any) => {

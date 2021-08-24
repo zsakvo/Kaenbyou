@@ -5,10 +5,20 @@ export default {
   listen() {
     console.log('开始监听 IPC 事件');
     ipcMain.on('setShelfList', async (evt: IpcMainEvent, shelfList) => {
-      console.log(db.shelfDB.get('list').value());
       if (!(db.shelfDB.get('list').value() instanceof Array)) {
         db.shelfDB.set('list', shelfList).write();
       }
+    });
+    ipcMain.on('setShelfBooks', async (evt: IpcMainEvent, shelfId: string, books: any[]) => {
+      console.log('--->setShelfBooks');
+      const list: any = db.shelfDB.get('list');
+      const shelf = list.find({
+        shelf_id: shelfId
+      });
+      if (!(shelf.get('books').value() instanceof Array)) {
+        shelf.set('books', books).write();
+      }
+      console.log('setShelfBooks<---');
     });
   }
 };
