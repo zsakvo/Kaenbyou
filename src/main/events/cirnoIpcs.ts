@@ -1,4 +1,4 @@
-import { ipcMain, IpcMainEvent } from 'electron/main';
+import { ipcMain, IpcMainEvent } from 'electron';
 
 export default {
   listen() {
