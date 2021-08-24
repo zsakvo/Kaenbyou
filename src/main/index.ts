@@ -5,6 +5,7 @@ import { join } from 'path';
 import { app, BrowserWindow } from 'electron';
 import dotenv from 'dotenv';
 import { isDev } from '../utils';
+import ipcs from './events/cirnoIpcs';
 dotenv.config();
 class createWin {
   private mainWindow: BrowserWindow;
@@ -37,6 +38,7 @@ class createWin {
 }
 
 app.whenReady().then(() => {
+  ipcs.listen();
   return new createWin();
 });
 

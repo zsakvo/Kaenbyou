@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, reactive } from 'vue';
+import { defineComponent, onMounted, onUnmounted, reactive } from 'vue';
 import { Popup, Icon, Loading } from 'vant';
 import Content from '@/components/Content';
 import themeConfig from '@/plugins/themes';
@@ -14,6 +14,7 @@ import menuIcon from '@/assets/imgs/menu.png';
 import moonIcon from '@/assets/imgs/moon.png';
 import bookmarkIcon from '@/assets/imgs/bookmark.png';
 import readerSettingsIcon from '@/assets/imgs/read_settings.png';
+import dayjs from 'dayjs';
 
 export default defineComponent({
   components: {
@@ -38,7 +39,7 @@ export default defineComponent({
       showBottomPopup: false,
       showCatalog: false,
       canPopup: true,
-      canSelect: true
+      now: dayjs()
     });
     const icons = {
       arrowLeftIcon,
@@ -79,23 +80,24 @@ export default defineComponent({
       router.back();
     };
     onMounted(async () => {
+      // const now = dayjs();
+      // console.log(now.hour());
+      // console.log(now.minute());
       state.bid = route.query.bid as string;
       state.cid = route.query.cid as string;
       state.bookName = route.params.bookName as string;
+      setInterval(() => {
+        state.now = dayjs();
+      }, 1000 * 60);
       // getDivisionList(state.bid).then((res) => {
       //   state.divisionList = res.division_list
       // })
       await getChapters(state.bid);
       fetchContent(state.cid);
     });
-    // watch(state, (newValue, oldValue) => {
-    //   console.log('The new counter value is: ' + newValue, oldValue);
-    //   if (newValue.canPopup) {
-    //     state.canSelect = false;
-    //   } else {
-    //     state.canSelect = true;
-    //   }
-    // });
+    onUnmounted(() => {
+      clearInterval();
+    });
     const getChapters = async (book_id: any) => {
       const res: any = await getDivisionList(book_id);
       const divisions = res.division_list;
@@ -109,7 +111,6 @@ export default defineComponent({
       const res = await getContent(cid);
       state.title = res.chapter_info.chapter_title;
       state.content = res.chapter_info.txt_content;
-      state.canSelect = true;
     };
     const popupHandler = () => {
       const lastCanPopup = state.canPopup;
@@ -124,11 +125,9 @@ export default defineComponent({
       if (!state.showBottomPopup) {
         state.showBottomPopup = true;
         state.showTopPopup = true;
-        state.canSelect = false;
       } else {
         state.showBottomPopup = false;
         state.showTopPopup = false;
-        state.canSelect = true;
       }
     };
     const jumpChapter = async (cid) => {
@@ -186,7 +185,7 @@ export default defineComponent({
             color: '#978042'
           }}
         >
-          {this.state.title}
+          {this.state.now.hour() + ':' + this.state.now.minute()}
         </div>
         {this.state.title.length === 0 ? (
           <div
@@ -201,11 +200,7 @@ export default defineComponent({
             <Loading color="#997b5f" size="48" />
           </div>
         ) : (
-          <Content
-            title={this.state.title}
-            content={this.state.content}
-            canSelect={this.state.canSelect}
-          />
+          <Content title={this.state.title} content={this.state.content} />
         )}
         <Popup
           show={this.state.showTopPopup}
