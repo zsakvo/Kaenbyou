@@ -19,11 +19,11 @@ class createWin {
         nodeIntegration: true,
         contextIsolation: false,
         webviewTag: true,
-        webSecurity: false,
+        webSecurity: true,
         devTools: true,
         plugins: true,
         scrollBounce: true,
-        experimentalFeatures: true,
+        experimentalFeatures: false,
         enableRemoteModule: true,
         nodeIntegrationInSubFrames: true,
         preload: join(__dirname, '../../dist/preload/index.js')
