@@ -116,6 +116,12 @@ service.interceptors.request.use(
   }
 );
 
+service.interceptors.request.use((config: AxiosRequestConfig) => {
+  console.log(config);
+  //http://xiaovv-web.com/javascript/#%E7%AE%80%E5%8D%95%E5%B0%81%E8%A3%85
+  return config;
+});
+
 service.interceptors.response.use(
   (res: AxiosResponse) => {
     popPending(res);
