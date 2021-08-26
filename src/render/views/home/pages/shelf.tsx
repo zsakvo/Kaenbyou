@@ -43,6 +43,7 @@ export default defineComponent({
     };
     const fetchBooks = async () => {
       const res = await getShelfBookList(state.shelfId, state.page);
+      console.log(res);
       if (state.page === 0) {
         state.shelfBooks = res.book_list;
       } else {

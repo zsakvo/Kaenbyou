@@ -31,6 +31,7 @@ export default defineConfig(() => {
     },
     build: {
       outDir: join(__dirname, './dist/render'),
+      sourcemap: true,
       assetsDir: './assets', // 相对路径 加载问题
       emptyOutDir: true
     },
