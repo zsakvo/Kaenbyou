@@ -20,5 +20,15 @@ export default {
       }
       console.log('setShelfBooks<---');
     });
+    ipcMain.on(
+      'setCpt',
+      async (evt: IpcMainEvent, cptId: string, content: string, authorSay: string) => {
+        console.log('--->setCpt');
+        const cpts: any = db.cptDB.get(cptId);
+        cpts.set('content', content).write();
+        cpts.set('authorSay', authorSay).write();
+        console.log('setCpt<---');
+      }
+    );
   }
 };
