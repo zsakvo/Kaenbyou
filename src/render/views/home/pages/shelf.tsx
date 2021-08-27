@@ -1,11 +1,9 @@
-import { defineComponent, onMounted, reactive, toRaw } from 'vue';
+import { defineComponent, onMounted, reactive } from 'vue';
 import { Tabbar, TabbarItem, PullRefresh } from 'vant';
 import { getShelfBookList, getShelfList } from '@/api';
 
 import { useRouter } from 'vue-router';
 import styles from '@/style/shelf.module.scss';
-// import { ipcRenderer } from 'electron';
-const electron = window.require('electron');
 
 export default defineComponent({
   name: 'Home',
@@ -25,9 +23,7 @@ export default defineComponent({
       shelfBooks: []
     });
     onMounted(() => {
-      initShelf().then(() => {
-        electron.ipcRenderer.send('setShelfList', toRaw(state.shelfList));
-      });
+      initShelf();
     });
     const initShelf = async () => {
       const res = await getShelfList();
@@ -49,7 +45,6 @@ export default defineComponent({
       } else {
         state.shelfBooks.concat(res.book_list);
       }
-      electron.ipcRenderer.send('setShelfBooks', toRaw(state.shelfId), toRaw(state.shelfBooks));
     };
 
     const toReader = (book: any) => {

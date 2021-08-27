@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import qs from 'qs';
+import db from './database';
 import { Toast } from 'vant';
 
 // const status = (status: number) => {
@@ -135,6 +136,7 @@ service.interceptors.response.use(
         localStorage.setItem('token', token);
         localStorage.setItem('account', account);
       }
+      db.set(res.config.url, res.data.data, res.config.params);
       return res.data.data;
     }
   },
