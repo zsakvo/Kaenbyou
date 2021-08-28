@@ -20,8 +20,16 @@ export default {
       }
       console.log('setShelfBooks<---');
     });
+    ipcMain.on('setDivisions', async (evt: IpcMainEvent, data: any) => {
+      console.log('--->setDivisions');
+      console.log(data);
+    });
+    ipcMain.on('setChapters', async (evt: IpcMainEvent, data: any) => {
+      console.log('--->setChapters');
+      console.log(data);
+    });
     ipcMain.on(
-      'setCpt',
+      'setContent',
       async (evt: IpcMainEvent, cptId: string, content: string, authorSay: string) => {
         console.log('--->setCpt');
         const cpts: any = db.cptDB.get(cptId);

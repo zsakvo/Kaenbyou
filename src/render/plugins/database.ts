@@ -1,5 +1,5 @@
 const electron = window.require('electron');
-import { SHELF_BOOK_LIST, SHELF_LIST } from './const';
+import { CHAPTER_LIST, DIVISION_LIST, SHELF_BOOK_LIST, SHELF_LIST } from './const';
 
 const set = (url: string | undefined, data: any, params: any) => {
   console.log(url);
@@ -11,6 +11,12 @@ const set = (url: string | undefined, data: any, params: any) => {
       break;
     case SHELF_BOOK_LIST:
       electron.ipcRenderer.send('setShelfBooks', data.book_list, params.shelf_id);
+      break;
+    case DIVISION_LIST:
+      electron.ipcRenderer.send('setDivisions', data.division_list);
+      break;
+    case CHAPTER_LIST:
+      electron.ipcRenderer.send('setChapters', data.chapter_list);
       break;
   }
 };
