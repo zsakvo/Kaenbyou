@@ -1,5 +1,6 @@
 import { decrypt } from '@/plugins/decrypt';
 import { get } from '@/plugins/request';
+const electron = window.require('electron');
 
 export const login = (params: object) => {
   return get('/signup/login', params);
@@ -54,5 +55,6 @@ export const getContent = async (chapter_id: string) => {
   const cmd = res.command;
   res = await getCptIfm(chapter_id, cmd);
   res.chapter_info.txt_content = decrypt(res.chapter_info.txt_content, cmd);
+  electron.ipcRenderer.send('setChapters', res);
   return res;
 };
