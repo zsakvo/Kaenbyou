@@ -32,9 +32,10 @@ export const getDivisionList = (book_id: string) => {
   });
 };
 
-export const getChapterByDivisionId = (division_id: string) => {
+export const getChapterByDivisionId = (division_id: string, book_id: string) => {
   return get('/chapter/get_updated_chapter_by_division_id', {
-    division_id
+    division_id,
+    book_id
   });
 };
 export const getChapterCmd = (chapter_id: string) => {
@@ -50,11 +51,11 @@ export const getCptIfm = (chapter_id: string, chapter_command: string) => {
   });
 };
 
-export const getContent = async (chapter_id: string) => {
+export const getContent = async (chapter_id: string, book_id: string) => {
   let res: any = await getChapterCmd(chapter_id);
   const cmd = res.command;
   res = await getCptIfm(chapter_id, cmd);
   res.chapter_info.txt_content = decrypt(res.chapter_info.txt_content, cmd);
-  electron.ipcRenderer.send('setContent', res);
+  electron.ipcRenderer.send('setContent', res, { book_id });
   return res;
 };

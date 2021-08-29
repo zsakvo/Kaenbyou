@@ -103,12 +103,12 @@ export default defineComponent({
       const divisions = res.division_list;
       for (let i = 0; i < divisions.length; i++) {
         const did = divisions[i].division_id;
-        const res = (await getChapterByDivisionId(did)) as any;
+        const res = (await getChapterByDivisionId(did, state.bid)) as any;
         state.chapters = state.chapters.concat(res.chapter_list);
       }
     };
     const fetchContent = async (cid) => {
-      const res = await getContent(cid);
+      const res = await getContent(cid, state.bid);
       state.title = res.chapter_info.chapter_title;
       state.content = res.chapter_info.txt_content;
     };

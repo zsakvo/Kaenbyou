@@ -16,7 +16,7 @@ const set = (url: string | undefined, data: any, params: any) => {
       electron.ipcRenderer.send('setDivisions', data.division_list);
       break;
     case CHAPTER_LIST:
-      electron.ipcRenderer.send('setChapters', data.chapter_list);
+      electron.ipcRenderer.send('setChapters', data.chapter_list, params);
       break;
   }
 };

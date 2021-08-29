@@ -3,6 +3,7 @@ import db from '../plugins/datastore';
 import Datastore from 'lowdb';
 import FileSync from 'lowdb/adapters/FileSync';
 import path from 'path';
+import fs from 'fs-extra';
 const STORE_PATH = app.getPath('userData');
 
 export default {
@@ -24,16 +25,24 @@ export default {
       }
       console.log('setShelfBooks<---');
     });
-    ipcMain.on('setChapters', async (evt: IpcMainEvent, data: any) => {
+    //此处改为用 vuex 缓存目录数据然后按顺序存储
+    ipcMain.on('setChapters', async (evt: IpcMainEvent, data: any, params: any) => {
+      if (!fs.pathExistsSync(path.join(STORE_PATH, 'db', 'books', params.book_id))) {
+        fs.mkdirpSync(path.join(STORE_PATH, 'db', 'books', params.book_id));
+      }
+      const catalog = Datastore(
+        new FileSync(path.join(STORE_PATH, 'db', 'books', params.book_id, 'catalog'))
+      );
+      catalog.set(params.division_id, data).write();
       console.log('--->setChapters');
-      console.log(data);
     });
-    ipcMain.on('setContent', async (evt: IpcMainEvent, data: any) => {
+    ipcMain.on('setContent', async (evt: IpcMainEvent, data: any, params: any) => {
       console.log('--->setCpt');
       console.log(data);
       data = data.chapter_info;
-      const cpt = Datastore(new FileSync(path.join(STORE_PATH, 'db', 'cpts', data.chapter_id)));
-      console.log(cpt);
+      const cpt = Datastore(
+        new FileSync(path.join(STORE_PATH, 'db', 'books', params.book_id, data.chapter_id))
+      );
       cpt.set('chapter_title', data.chapter_title).write();
       cpt.set('txt_content', data.txt_content).write();
       cpt.set('author_say', data.author_say).write();
