@@ -7,8 +7,8 @@ import id from 'lodash-id';
 
 const STORE_PATH = app.getPath('userData');
 
-if (!fs.pathExistsSync(path.join(STORE_PATH, 'db'))) {
-  fs.mkdirpSync(path.join(STORE_PATH, 'db'));
+if (!fs.pathExistsSync(path.join(STORE_PATH, 'db', 'cpts'))) {
+  fs.mkdirpSync(path.join(STORE_PATH, 'db', 'cpts'));
 }
 
 console.log(STORE_PATH);

@@ -1,5 +1,9 @@
-import { ipcMain, IpcMainEvent } from 'electron';
+import { app, ipcMain, IpcMainEvent } from 'electron';
 import db from '../plugins/datastore';
+import Datastore from 'lowdb';
+import FileSync from 'lowdb/adapters/FileSync';
+import path from 'path';
+const STORE_PATH = app.getPath('userData');
 
 export default {
   listen() {
@@ -20,23 +24,19 @@ export default {
       }
       console.log('setShelfBooks<---');
     });
-    ipcMain.on('setDivisions', async (evt: IpcMainEvent, data: any) => {
-      console.log('--->setDivisions');
-      console.log(data);
-    });
     ipcMain.on('setChapters', async (evt: IpcMainEvent, data: any) => {
       console.log('--->setChapters');
       console.log(data);
     });
-    ipcMain.on(
-      'setContent',
-      async (evt: IpcMainEvent, cptId: string, content: string, authorSay: string) => {
-        console.log('--->setCpt');
-        const cpts: any = db.cptDB.get(cptId);
-        cpts.set('content', content).write();
-        cpts.set('authorSay', authorSay).write();
-        console.log('setCpt<---');
-      }
-    );
+    ipcMain.on('setContent', async (evt: IpcMainEvent, data: any) => {
+      console.log('--->setCpt');
+      console.log(data);
+      data = data.chapter_info;
+      const cpt = Datastore(new FileSync(path.join(STORE_PATH, 'db', 'cpts', data.chapter_id)));
+      console.log(cpt);
+      cpt.set('chapter_title', data.chapter_title).write();
+      cpt.set('txt_content', data.txt_content).write();
+      cpt.set('author_say', data.author_say).write();
+    });
   }
 };
