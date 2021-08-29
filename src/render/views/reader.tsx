@@ -33,6 +33,7 @@ export default defineComponent({
       cmd: '',
       title: '',
       content: '',
+      authorSay: '',
       bookName: '',
       chapters: [],
       showTopPopup: false,
@@ -111,6 +112,7 @@ export default defineComponent({
       const res = await getContent(cid, state.bid);
       state.title = res.chapter_info.chapter_title;
       state.content = res.chapter_info.txt_content;
+      state.authorSay = res.chapter_info.author_say;
     };
     const popupHandler = () => {
       const lastCanPopup = state.canPopup;
@@ -200,7 +202,11 @@ export default defineComponent({
             <Loading color="#997b5f" size="48" />
           </div>
         ) : (
-          <Content title={this.state.title} content={this.state.content} />
+          <Content
+            title={this.state.title}
+            content={this.state.content}
+            authorSay={this.state.authorSay}
+          />
         )}
         <Popup
           show={this.state.showTopPopup}

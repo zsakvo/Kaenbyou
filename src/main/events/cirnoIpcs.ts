@@ -38,7 +38,6 @@ export default {
     });
     ipcMain.on('setContent', async (evt: IpcMainEvent, data: any, params: any) => {
       console.log('--->setCpt');
-      console.log(data);
       data = data.chapter_info;
       const cpt = Datastore(
         new FileSync(path.join(STORE_PATH, 'db', 'books', params.book_id, data.chapter_id))

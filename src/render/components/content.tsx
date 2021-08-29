@@ -14,6 +14,10 @@ export default defineComponent({
     content: {
       type: String,
       default: ''
+    },
+    authorSay: {
+      type: String,
+      default: null
     }
   },
   setup() {
@@ -72,6 +76,39 @@ export default defineComponent({
               {c}
             </div>
           ))}
+          {this.authorSay ? (
+            <div
+              class="author-say"
+              style={{
+                background: '#d4c184',
+                boxSizing: 'border-box',
+                padding: '8px 12px',
+                marginTop: '24px',
+                borderRadius: '4px'
+              }}
+            >
+              <div
+                class="say-title"
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 'bold',
+                  marginBottom: '4px',
+                  color: '#655112'
+                }}
+              >
+                作者的话
+              </div>
+              <div
+                class="say-content"
+                style={{
+                  fontSize: '12px',
+                  color: '#695516'
+                }}
+              >
+                {this.authorSay}
+              </div>
+            </div>
+          ) : null}
         </div>
       </PerfectScrollbar>
     );
