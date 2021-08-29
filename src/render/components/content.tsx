@@ -102,7 +102,8 @@ export default defineComponent({
                 class="say-content"
                 style={{
                   fontSize: '12px',
-                  color: '#695516'
+                  color: '#695516',
+                  whiteSpace: 'pre-wrap'
                 }}
               >
                 {this.authorSay}
