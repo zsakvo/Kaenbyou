@@ -1,7 +1,19 @@
+import { BOOK, RANK, SHELF, USER } from './const';
+
 export interface State {
-  title: string;
+  shelf: {
+    list: any[];
+  };
+  rank: any;
+  book: any;
+  user: any;
 }
 
 export const state: State = {
-  title: 'Electron 、Vue3 、Varlet 与 tsx 的结合实例'
+  [SHELF]: {
+    list: []
+  },
+  [RANK]: {},
+  [BOOK]: {},
+  [USER]: {}
 };
