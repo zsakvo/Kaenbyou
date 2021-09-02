@@ -17,7 +17,7 @@ export default defineComponent({
     const state = reactive({
       page: 0,
       shelfId: 0,
-      loading: false,
+      loading: true,
       noMore: false,
       shelfList: [],
       shelfBooks: []
@@ -33,6 +33,7 @@ export default defineComponent({
       await fetchBooks();
     };
     const onRefresh = async () => {
+      state.loading = true;
       state.page = 0;
       await getShelfList();
       state.loading = false;
@@ -75,6 +76,7 @@ export default defineComponent({
             onRefresh={this.onRefresh}
             modelValue={this.state.loading}
             class={styles.pullWrapper}
+            successText="刷新成功"
           >
             {this.state.shelfBooks.map((book: any, index: number) => (
               <div class={styles.bookCard} key={index} onClick={() => this.toReader(book)}>
