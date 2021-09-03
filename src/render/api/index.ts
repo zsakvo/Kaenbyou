@@ -59,3 +59,7 @@ export const getContent = async (chapter_id: string, book_id: string) => {
   electron.ipcRenderer.send('setContent', res, { book_id });
   return res;
 };
+
+export const getMyInfo = async () => {
+  return get('/reader/get_my_info');
+};
