@@ -1,4 +1,4 @@
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, onMounted, reactive } from 'vue';
 import { Cell, CellGroup } from 'vant';
 import configIcon from '@/assets/imgs/config.png';
 import coinIcon from '@/assets/imgs/coin.png';
@@ -8,6 +8,7 @@ import followIcon from '@/assets/imgs/follow.png';
 import fansIcon from '@/assets/imgs/fans.png';
 import bookListIcon from '@/assets/imgs/book_list.png';
 import styles from '@/style/user.module.scss';
+import { getMyInfo } from '@/api';
 
 export default defineComponent({
   name: 'User',
@@ -26,6 +27,11 @@ export default defineComponent({
         fansIcon,
         bookListIcon
       }
+    });
+    onMounted(() => {
+      getMyInfo().then((res) => {
+        console.log(res);
+      });
     });
     return { state };
   },
