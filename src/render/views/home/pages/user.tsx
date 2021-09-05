@@ -26,11 +26,16 @@ export default defineComponent({
         followIcon,
         fansIcon,
         bookListIcon
+      },
+      readInfo: {
+        avatar_url: 'https://avatars.githubusercontent.com/u/25399519?v=4',
+        reader_name: ''
       }
     });
     onMounted(() => {
-      getMyInfo().then((res) => {
+      getMyInfo().then((res: any) => {
         console.log(res);
+        state.readInfo = res.reader_info;
       });
     });
     return { state };
@@ -40,10 +45,10 @@ export default defineComponent({
       <div class={styles.page}>
         <div class={styles.header}>
           <div class={styles.avatar}>
-            <img src="https://avatars.githubusercontent.com/u/25399519?v=4" alt="" />
+            <img src={this.state.readInfo.avatar_url} alt="" />
           </div>
           <div class={styles.info}>
-            <div class={styles.name}>沚水</div>
+            <div class={styles.name}>{this.state.readInfo.reader_name}</div>
             <div class={styles.lv}>Lv15.盖世豪杰</div>
           </div>
         </div>
