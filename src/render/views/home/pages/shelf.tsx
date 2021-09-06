@@ -2,6 +2,8 @@ import { defineComponent, onMounted, reactive } from 'vue';
 import { Tabbar, TabbarItem, PullRefresh } from 'vant';
 import { getShelfBookList, getShelfList } from '@/api';
 
+import switchIcon from '@/assets/imgs/switch.png';
+
 import { useRouter } from 'vue-router';
 import styles from '@/style/shelf.module.scss';
 
@@ -14,6 +16,9 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const icons = {
+      switch: switchIcon
+    };
     const state = reactive({
       page: 0,
       shelfId: 0,
@@ -62,7 +67,7 @@ export default defineComponent({
         }
       });
     };
-    return { state, onRefresh, toReader };
+    return { icons, state, onRefresh, toReader };
   },
   render() {
     return (
@@ -70,7 +75,9 @@ export default defineComponent({
         <div class={styles.page}>
           <div class={styles.toolBar}>
             <div class={styles.title}> 我的书架 </div>
-            <div class={styles.menus}></div>
+            <div class={styles.menus}>
+              <img class={styles.menuIcon} src={this.icons.switch} alt="" />
+            </div>
           </div>
           <PullRefresh
             onRefresh={this.onRefresh}

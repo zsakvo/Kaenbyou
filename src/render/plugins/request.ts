@@ -86,6 +86,7 @@ export const clearPending = () => {
 
 const service = axios.create({
   baseURL: 'https://service-hdenic3v-1253220536.sh.apigw.tencentcs.com/release/api',
+  // baseURL: 'http://localhost:9612/api',
   headers: {
     get: {
       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'

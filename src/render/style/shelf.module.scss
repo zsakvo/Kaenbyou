@@ -8,11 +8,21 @@
     border-bottom: 1px solid var(--van-gray-1);
     height: 48px;
     display: flex;
+    align-items: center;
     .title {
       padding: 0 18px;
       line-height: 48px;
       font-size: 15px;
       font-weight: bold;
+    }
+    .menus {
+      flex: 1;
+      text-align: end;
+      margin-right: 16px;
+      .menu-icon {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
   .pull-wrapper {
