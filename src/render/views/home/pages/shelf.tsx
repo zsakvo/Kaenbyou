@@ -1,8 +1,11 @@
-import { defineComponent, onMounted, reactive } from 'vue';
+import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue';
 import { Tabbar, TabbarItem, PullRefresh } from 'vant';
 import { getShelfBookList, getShelfList } from '@/api';
 
 import switchIcon from '@/assets/imgs/switch.png';
+
+import BScroll from '@better-scroll/core';
+import ScrollBar from '@better-scroll/scroll-bar';
 
 import { useRouter } from 'vue-router';
 import styles from '@/style/shelf.module.scss';
@@ -16,6 +19,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    BScroll.use(ScrollBar);
     const icons = {
       switch: switchIcon
     };
@@ -27,6 +31,9 @@ export default defineComponent({
       shelfList: [],
       shelfBooks: []
     });
+    const scrollWrapper = ref(null);
+    const refresh = ref(null);
+    let scroll;
     onMounted(() => {
       initShelf();
     });
@@ -51,6 +58,13 @@ export default defineComponent({
       } else {
         state.shelfBooks.concat(res.book_list);
       }
+      await nextTick();
+      console.log('books--->', scrollWrapper.value);
+      // const wrapper = document.querySelector('._pull-wrapper_1nvvv_29');
+      scroll = new BScroll(scrollWrapper.value as any, {
+        scrollY: true,
+        scrollbar: true
+      });
     };
 
     const toReader = (book: any) => {
@@ -67,7 +81,7 @@ export default defineComponent({
         }
       });
     };
-    return { icons, state, onRefresh, toReader };
+    return { icons, state, onRefresh, toReader, scrollWrapper, refresh, scroll };
   },
   render() {
     return (
@@ -79,25 +93,30 @@ export default defineComponent({
               <img class={styles.menuIcon} src={this.icons.switch} alt="" />
             </div>
           </div>
-          <PullRefresh
+          {/* <PullRefresh
             onRefresh={this.onRefresh}
             modelValue={this.state.loading}
             class={styles.pullWrapper}
             successText="刷新成功"
-          >
-            {this.state.shelfBooks.map((book: any, index: number) => (
-              <div class={styles.bookCard} key={index} onClick={() => this.toReader(book)}>
-                <div class={styles.cover}>
-                  <img src={book.book_info.cover} alt="" />
+            ref="refresh"
+          > */}
+          <div class={styles.pullWrapper} ref="scrollWrapper">
+            <div class={styles.books}>
+              {this.state.shelfBooks.map((book: any, index: number) => (
+                <div class={styles.bookCard} key={index} onClick={() => this.toReader(book)}>
+                  <div class={styles.cover}>
+                    <img src={book.book_info.cover} alt="" />
+                  </div>
+                  <div class={styles.info}>
+                    <div class={styles.name}>{book.book_info.book_name}</div>
+                    <div class={styles.author}>{book.book_info.author_name}</div>
+                    <div class={styles.new}>{book.book_info.last_chapter_info.chapter_title}</div>
+                  </div>
                 </div>
-                <div class={styles.info}>
-                  <div class={styles.name}>{book.book_info.book_name}</div>
-                  <div class={styles.author}>{book.book_info.author_name}</div>
-                  <div class={styles.new}>{book.book_info.last_chapter_info.chapter_title}</div>
-                </div>
-              </div>
-            ))}
-          </PullRefresh>
+              ))}
+            </div>
+          </div>
+          {/* </PullRefresh> */}
         </div>
       </>
     );
