@@ -29,6 +29,17 @@
     height: calc(100vh - 100px);
     overflow: hidden;
     position: relative;
+    .pulldown-wrapper {
+      position: absolute;
+      width: 100%;
+      padding: 32px;
+      padding-bottom: 4px;
+      box-sizing: border-box;
+      transform: translateY(-100%) translateZ(0);
+      text-align: center;
+      color: #999;
+      font-size: 13px;
+    }
     .books {
       padding-top: 18px;
       padding-bottom: 18px;
