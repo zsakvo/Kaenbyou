@@ -6,6 +6,7 @@ import switchIcon from '@/assets/imgs/switch.png';
 
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
+import PullDown from '@better-scroll/pull-down';
 
 import { useRouter } from 'vue-router';
 import styles from '@/style/shelf.module.scss';
@@ -20,6 +21,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     BScroll.use(ScrollBar);
+    BScroll.use(PullDown);
     const icons = {
       switch: switchIcon
     };
@@ -63,7 +65,8 @@ export default defineComponent({
       // const wrapper = document.querySelector('._pull-wrapper_1nvvv_29');
       scroll = new BScroll(scrollWrapper.value as any, {
         scrollY: true,
-        scrollbar: true
+        scrollbar: true,
+        pullDownRefresh: true
       });
     };
 
@@ -116,6 +119,7 @@ export default defineComponent({
               ))}
             </div>
           </div>
+
           {/* </PullRefresh> */}
         </div>
       </>

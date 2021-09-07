@@ -28,6 +28,7 @@
   .pull-wrapper {
     height: calc(100vh - 100px);
     overflow: hidden;
+    position: relative;
     .books {
       padding-top: 18px;
       padding-bottom: 18px;
