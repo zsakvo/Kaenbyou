@@ -169,6 +169,7 @@ export default defineComponent({
   },
   render() {
     return (
+      /* global PerfectScrollbar  */
       <div class={styles.page} style={this.pageStyle} onClick={this.popupHandler}>
         <div
           class={styles.topInfo}
@@ -207,6 +208,86 @@ export default defineComponent({
             authorSay={this.state.authorSay}
           />
         )}
+        <Popup
+          show={this.state.showTopPopup}
+          overlay={false}
+          position="top"
+          duration="0.15"
+          class={styles.topPopup}
+          style={this.topBarStyle}
+        >
+          <div class={styles.backIcon} onClick={this.goBack}>
+            <Icon name="arrow-left" size="22" />
+          </div>
+          <div class={styles.title}>{this.state.bookName}</div>
+          <div class={styles.actionIcon}></div>
+        </Popup>
+        <Popup
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+          show={this.state.showBottomPopup}
+          overlay={false}
+          position="bottom"
+          duration="0.15"
+          style={this.bottomBarStyle}
+          class={styles.bottomPopup}
+        >
+          <div class={styles.firstLine}>
+            <img src={this.icons.arrowLeftIcon} alt="" class={[styles.arrow, styles.arrowLeft]} />
+            <div class={styles.vipDesc}>
+              <img src={this.icons.vipIcon} alt="" class={styles.descIcon} />
+              <div class={styles.descText}>5523 人订阅</div>
+            </div>
+            <img src={this.icons.arrowRightIcon} alt="" class={[styles.arrow, styles.right]} />
+          </div>
+          <div class={styles.secLine}>
+            <img src={this.icons.menuIcon} class={styles.icon} alt="" onClick={this.showCatalog} />
+            <div class={styles.readDesc}> 已读 56% </div>
+            <img src={this.icons.moonIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
+            <img src={this.icons.bookmarkIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
+            <img
+              src={this.icons.readerSettingsIcon}
+              class={[styles.icon, styles.iconMLeft]}
+              alt=""
+            />
+          </div>
+        </Popup>
+        <Popup
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+          onClick-overlay={(event) => {
+            event.stopPropagation();
+            this.state.showCatalog = false;
+          }}
+          onClosed={() => {
+            console.log('closed!');
+            this.state.showTopPopup = false;
+            this.state.showBottomPopup = false;
+          }}
+          show={this.state.showCatalog}
+          overlay={true}
+          position="left"
+          duration="0.15"
+          style={this.leftBarStyle}
+          class={styles.catalogPopup}
+        >
+          <div class={styles.bookName}>{this.state.bookName}</div>
+          <PerfectScrollbar class={styles.cataWrapper}>
+            {this.state.chapters.map((cata: any) => (
+              <div
+                onClick={() => this.jumpChapter(cata.chapter_id)}
+                class={[
+                  styles.cata,
+                  cata.chapter_id === this.state.cid ? styles.cataSelected : null
+                ]}
+              >
+                {cata.chapter_title}
+              </div>
+            ))}
+          </PerfectScrollbar>
+        </Popup>
       </div>
     );
   }

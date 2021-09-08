@@ -1,5 +1,7 @@
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, onMounted, reactive, nextTick, ref } from 'vue';
 import { PullRefresh } from 'vant';
+import BScroll from '@better-scroll/core';
+import ScrollBar from '@better-scroll/scroll-bar';
 
 export default defineComponent({
   name: 'Content',
@@ -24,94 +26,111 @@ export default defineComponent({
     const state = reactive({
       refreshing: false
     });
-    return { state };
+    const scrollWrapper = ref(null);
+    BScroll.use(ScrollBar);
+    let scroll;
+    onMounted(() => {
+      nextTick().then(() => {
+        scroll = new BScroll(scrollWrapper.value as any, {
+          scrollY: true,
+          scrollbar: true,
+          pullDownRefresh: {
+            threshold: 90,
+            stop: 45
+          }
+        });
+        console.log(scroll);
+      });
+    });
+    return { state, scrollWrapper };
   },
   render() {
     return (
-      /* global PerfectScrollbar  */
-
-      <PerfectScrollbar
+      <div
+        ref="scrollWrapper"
         style={{
-          width: '100vw',
-          height: '100vh',
-          overflow: 'auto',
+          height: 'calc(100vh - 84px)',
+          overflow: 'hidden',
+          position: 'absolute',
+          marginTop: '42px',
           boxSizing: 'border-box',
-          padding: '60px 24px',
+          padding: '0 24px',
           userSelect: 'none'
         }}
-        headHeight="64"
-        modelValue={this.state.refreshing}
-        onRefresh={() => {
-          console.log('refresh-->', this.state.refreshing);
-          setTimeout(() => {
-            this.state.refreshing = false;
-          }, 3000);
-        }}
       >
-        <div
-          style={{
-            fontSize: '18px',
-            fontWeight: 400,
-            marginBottom: '32px'
-          }}
-        >
-          {this.title}
-        </div>
-        <div
-          style={{
-            textAlign: 'justify',
-            fontSize: '15px',
-            color: '#333',
-            lineHeight: '1.6'
-          }}
-        >
-          {this.content.split('\n').map((c) => (
-            <div
-              style={{
-                margin: '8px 0',
-                wordBreak: 'break-all',
-                wordWrap: 'break-word'
-              }}
-            >
-              {c}
-            </div>
-          ))}
-          {this.authorSay ? (
-            <div
-              class="author-say"
-              style={{
-                background: '#d4c184',
-                boxSizing: 'border-box',
-                padding: '8px 12px',
-                marginTop: '24px',
-                borderRadius: '4px'
-              }}
-            >
+        <div>
+          <div
+            style={{
+              fontSize: '18px',
+              fontWeight: 400,
+              marginBottom: '32px',
+              paddingTop: '24px'
+            }}
+          >
+            {this.title}
+          </div>
+          <div
+            style={{
+              textAlign: 'justify',
+              fontSize: '15px',
+              color: '#333',
+              lineHeight: '1.6'
+            }}
+          >
+            {this.content.split('\n').map((c) => (
               <div
-                class="say-title"
                 style={{
-                  fontSize: '12px',
-                  fontWeight: 'bold',
-                  marginBottom: '4px',
-                  color: '#655112'
+                  margin: '8px 0',
+                  wordBreak: 'break-all',
+                  wordWrap: 'break-word'
                 }}
               >
-                作者的话
+                {c}
               </div>
+            ))}
+            {this.authorSay ? (
               <div
-                class="say-content"
                 style={{
-                  fontSize: '12px',
-                  color: '#695516',
-                  whiteSpace: 'pre-wrap'
+                  paddingBottom: '24px'
                 }}
               >
-                {this.authorSay}
+                <div
+                  class="author-say"
+                  style={{
+                    background: '#d4c184',
+                    boxSizing: 'border-box',
+                    padding: '8px 12px',
+                    marginTop: '24px',
+                    borderRadius: '4px'
+                  }}
+                >
+                  <div
+                    class="say-title"
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      marginBottom: '4px',
+                      color: '#655112'
+                    }}
+                  >
+                    作者的话
+                  </div>
+                  <div
+                    class="say-content"
+                    style={{
+                      fontSize: '12px',
+                      color: '#695516',
+                      whiteSpace: 'pre-wrap'
+                    }}
+                  >
+                    {this.authorSay}
+                  </div>
+                </div>
               </div>
-            </div>
-          ) : null}
+            ) : null}
+          </div>
         </div>
-      </PerfectScrollbar>
+      </div>
     );
   }
 });
