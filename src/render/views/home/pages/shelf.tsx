@@ -1,6 +1,5 @@
-import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue';
+import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import { Tabbar, TabbarItem, PullRefresh } from 'vant';
-import { getShelfBookList, getShelfList } from '@/api';
 
 import switchIcon from '@/assets/imgs/switch.png';
 
@@ -10,6 +9,7 @@ import PullDown from '@better-scroll/pull-down';
 
 import { useRouter } from 'vue-router';
 import styles from '@/style/shelf.module.scss';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'Home',
@@ -20,37 +20,27 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
+    const scrollWrapper = ref(null);
+    const refresh = ref(null);
+    const tipText = ref('');
+    let scroll;
     BScroll.use(ScrollBar);
     BScroll.use(PullDown);
     const icons = {
       switch: switchIcon
     };
-    const state = reactive({
+    const query = reactive({
       page: 0,
-      shelfId: 0,
-      loading: true,
-      noMore: false,
-      shelfList: [],
-      shelfBooks: []
+      currentShelf: 0
     });
-    const scrollWrapper = ref(null);
-    const refresh = ref(null);
-    let scroll;
-    onMounted(() => {
-      initShelf();
+    const state = reactive({
+      loading: computed(() => store.state.shelf.loading),
+      shelfs: computed(() => store.state.shelf.shelfs),
+      currentBooks: computed(() => store.state.shelf.currentBooks)
     });
-    const initShelf = async () => {
-      const res = await getShelfList();
-      state.shelfList = res.shelf_list;
-      const initShelf = state.shelfList[0] as any;
-      state.shelfId = initShelf.shelf_id;
-      await fetchBooks();
-    };
     const onRefresh = async () => {
-      state.loading = true;
-      state.page = 0;
-      await getShelfList();
-      state.loading = false;
+      store.dispatch('shelf/init', query);
     };
     const PHASE = {
       moving: {
@@ -60,16 +50,12 @@ export default defineComponent({
       fetching: 'fetching',
       succeed: 'succeed'
     };
-    const tipText = ref('');
     const pullingDownHandler = async () => {
       setTipText(PHASE.fetching);
       await onRefresh();
       await nextTick();
-      setTipText(PHASE.succeed);
-      scroll.finishPullDown();
     };
     const setTipText = (phase) => {
-      console.log('phase', phase);
       const TEXTS_MAP = {
         enter: '下拉刷新',
         leave: '松手刷新',
@@ -99,20 +85,6 @@ export default defineComponent({
         setTipText(PHASE.moving.leave);
       });
     };
-    const fetchBooks = async () => {
-      const res = await getShelfBookList(state.shelfId, state.page);
-      console.log(res);
-      if (state.page === 0) {
-        state.shelfBooks = res.book_list;
-      } else {
-        state.shelfBooks.concat(res.book_list);
-      }
-      await nextTick();
-      console.log('books--->', scrollWrapper.value);
-      // const wrapper = document.querySelector('._pull-wrapper_1nvvv_29');
-      initScroll();
-    };
-
     const toReader = (book: any) => {
       const bid = book.book_info.book_id;
       const cid = book.last_read_chapter_id;
@@ -127,6 +99,22 @@ export default defineComponent({
         }
       });
     };
+    onMounted(() => {
+      initScroll();
+      store.dispatch('shelf/init', query);
+      console.log(store);
+    });
+    watch(
+      () => state.loading,
+      (val) => {
+        console.log('---watch loading---');
+        console.log(val);
+        if (!val) {
+          setTipText(PHASE.succeed);
+          scroll.finishPullDown();
+        }
+      }
+    );
     return { icons, state, onRefresh, toReader, scrollWrapper, refresh, scroll, tipText };
   },
   render() {
@@ -152,7 +140,7 @@ export default defineComponent({
                 <div>{this.tipText}</div>
               </div>
               <div class={styles.books}>
-                {this.state.shelfBooks.map((book: any, index: number) => (
+                {this.state.currentBooks.map((book: any, index: number) => (
                   <div class={styles.bookCard} key={index} onClick={() => this.toReader(book)}>
                     <div class={styles.cover}>
                       <img src={book.book_info.cover} alt="" />

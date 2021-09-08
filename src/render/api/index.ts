@@ -10,6 +10,11 @@ export const getShelfList = (): any => {
   return get('/bookshelf/get_shelf_list');
 };
 
+/**
+ * 获取书架书籍
+ * @param {number|string} shelf_id - 书架id
+ * @param {number} page - 页码
+ */
 export const getShelfBookList = (shelf_id: number | string, page: number): any => {
   return get('/bookshelf/get_shelf_book_list_new', {
     count: 100,
