@@ -16,7 +16,8 @@ const ShelfModule = {
     books: (state, data) => {
       const { books, page } = data;
       state.shelfPage = page;
-      state.currentBooks = state.currentBooks.concat(books);
+      // state.currentBooks = state.currentBooks.concat(books);
+      state.currentBooks = books;
       state.loading = false;
       console.log(state);
     }

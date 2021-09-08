@@ -1,4 +1,13 @@
-import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onActivated,
+  onMounted,
+  reactive,
+  ref,
+  watch
+} from 'vue';
 import { Tabbar, TabbarItem, PullRefresh } from 'vant';
 
 import switchIcon from '@/assets/imgs/switch.png';
@@ -24,9 +33,9 @@ export default defineComponent({
     const scrollWrapper = ref(null);
     const refresh = ref(null);
     const tipText = ref('');
-    let scroll;
     BScroll.use(ScrollBar);
     BScroll.use(PullDown);
+    let scroll;
     const icons = {
       switch: switchIcon
     };
@@ -74,9 +83,7 @@ export default defineComponent({
         }
       });
       scroll.on('pullingDown', pullingDownHandler);
-      scroll.on('scrollEnd', (e) => {
-        console.log('scrollEnd', e);
-      });
+      // scroll.on('scrollEnd', () => {});
       // v2.4.0 supported
       scroll.on('enterThreshold', () => {
         setTipText(PHASE.moving.enter);
@@ -100,21 +107,34 @@ export default defineComponent({
       });
     };
     onMounted(() => {
-      initScroll();
+      if (state.currentBooks.length > 0) initScroll();
       store.dispatch('shelf/init', query);
-      console.log(store);
     });
+    //监听刷新状态
     watch(
       () => state.loading,
       (val) => {
         console.log('---watch loading---');
-        console.log(val);
-        if (!val) {
+        if (!val && scroll) {
           setTipText(PHASE.succeed);
           scroll.finishPullDown();
         }
       }
     );
+    //监听书籍列表
+    watch(
+      () => state.currentBooks,
+      async () => {
+        if (!scroll) {
+          await nextTick();
+          initScroll();
+        }
+      }
+    );
+    onActivated(() => {
+      console.log('---onActivited---');
+      if (state.currentBooks.length > 0) initScroll();
+    });
     return { icons, state, onRefresh, toReader, scrollWrapper, refresh, scroll, tipText };
   },
   render() {
