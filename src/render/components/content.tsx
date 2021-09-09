@@ -127,7 +127,13 @@ export default defineComponent({
                   </div>
                 </div>
               </div>
-            ) : null}
+            ) : (
+              <div
+                style={{
+                  height: '24px'
+                }}
+              ></div>
+            )}
           </div>
         </div>
       </div>
