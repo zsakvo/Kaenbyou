@@ -36,6 +36,7 @@ export default defineComponent({
       authorSay: '',
       bookName: '',
       chapters: [],
+      chapterIndex: 0,
       showTopPopup: false,
       showBottomPopup: false,
       showCatalog: false,
@@ -113,6 +114,7 @@ export default defineComponent({
       state.title = res.chapter_info.chapter_title;
       state.content = res.chapter_info.txt_content;
       state.authorSay = res.chapter_info.author_say;
+      state.chapterIndex = res.chapter_info.chapter_index;
     };
     const popupHandler = () => {
       const lastCanPopup = state.canPopup;
@@ -186,7 +188,8 @@ export default defineComponent({
             color: '#978042'
           }}
         >
-          {this.state.now.hour() + ':' + this.state.now.minute()}
+          {dayjs(this.state.now).format('HH:mm')}
+          <div>{this.state.chapterIndex + '/' + this.state.chapters.length}</div>
         </div>
         {this.state.title.length === 0 ? (
           <div

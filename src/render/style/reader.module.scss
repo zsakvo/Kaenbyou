@@ -23,6 +23,8 @@
     padding: 12px 16px;
     width: 100%;
     z-index: 20;
+    display: flex;
+    justify-content: space-between;
   }
   .top-popup {
     display: flex;
