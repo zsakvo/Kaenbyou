@@ -134,10 +134,11 @@ export default defineComponent({
     watch(
       () => state.currentBooks,
       async () => {
-        if (!scroll) {
-          await nextTick();
-          initScroll();
-        }
+        await nextTick();
+        // if (!scroll) {
+        //   initScroll();
+        // }
+        scroll ? scroll.refresh() : initScroll();
       }
     );
     onActivated(() => {
