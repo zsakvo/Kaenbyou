@@ -33,13 +33,20 @@ export default defineComponent({
       nextTick().then(() => {
         scroll = new BScroll(scrollWrapper.value as any, {
           scrollY: true,
+          click: true,
           scrollbar: true,
           pullDownRefresh: {
             threshold: 90,
             stop: 45
           }
         });
-        console.log(scroll);
+        const hooks = scroll.scroller.actionsHandler.hooks;
+        hooks.on('click', (e) => {
+          if (!e._constructed) {
+            return;
+          }
+          console.log(e);
+        });
       });
     });
     return { state, scrollWrapper };
