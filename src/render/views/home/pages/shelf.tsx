@@ -8,7 +8,7 @@ import {
   ref,
   watch
 } from 'vue';
-import { Tabbar, TabbarItem, PullRefresh } from 'vant';
+import { Tabbar, TabbarItem, PullRefresh, ActionSheet } from 'vant';
 
 import switchIcon from '@/assets/imgs/switch.png';
 
@@ -25,7 +25,8 @@ export default defineComponent({
   components: {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
-    [PullRefresh.name]: PullRefresh
+    [PullRefresh.name]: PullRefresh,
+    [ActionSheet.name]: ActionSheet
   },
   setup() {
     const router = useRouter();
@@ -46,7 +47,8 @@ export default defineComponent({
     const state = reactive({
       loading: computed(() => store.state.shelf.loading),
       shelfs: computed(() => store.state.shelf.shelfs),
-      currentBooks: computed(() => store.state.shelf.currentBooks)
+      currentBooks: computed(() => store.state.shelf.currentBooks),
+      actionShow: false
     });
     const onRefresh = async () => {
       store.dispatch('shelf/init', query);
@@ -106,6 +108,13 @@ export default defineComponent({
         }
       });
     };
+    const onMenuItemSelect = (val) => {
+      console.log('select menu item');
+      state.actionShow = false;
+      const index = state.shelfs.indexOf(val);
+      query.currentShelf = index;
+      store.dispatch('shelf/getBooks', query);
+    };
     onMounted(() => {
       if (state.currentBooks.length > 0) initScroll();
       store.dispatch('shelf/init', query);
@@ -135,7 +144,17 @@ export default defineComponent({
       console.log('---onActivited---');
       if (state.currentBooks.length > 0) initScroll();
     });
-    return { icons, state, onRefresh, toReader, scrollWrapper, refresh, scroll, tipText };
+    return {
+      icons,
+      state,
+      onRefresh,
+      toReader,
+      scrollWrapper,
+      refresh,
+      scroll,
+      tipText,
+      onMenuItemSelect
+    };
   },
   render() {
     return (
@@ -144,7 +163,13 @@ export default defineComponent({
           <div class={styles.toolBar}>
             <div class={styles.title}> 我的书架 </div>
             <div class={styles.menus}>
-              <img class={styles.menuIcon} src={this.icons.switch} alt="" />
+              <img
+                class={styles.menuIcon}
+                src={this.icons.switch}
+                onClick={() => {
+                  this.state.actionShow = true;
+                }}
+              />
             </div>
           </div>
           {/* <PullRefresh
@@ -175,9 +200,17 @@ export default defineComponent({
               </div>
             </div>
           </div>
-
-          {/* </PullRefresh> */}
         </div>
+        <ActionSheet
+          show={this.state.actionShow}
+          actions={this.state.shelfs}
+          round={false}
+          onSelect={this.onMenuItemSelect}
+          // @ts-ignore
+          onClickOverlay={() => {
+            this.state.actionShow = false;
+          }}
+        ></ActionSheet>
       </>
     );
   }

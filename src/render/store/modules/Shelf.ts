@@ -6,11 +6,21 @@ const ShelfModule = {
     loading: true,
     shelfs: [],
     shelfPage: 0,
-    currentShelf: {},
+    currentShelf: 0,
     currentBooks: []
   }),
   mutations: {
     shelfs: (state, arr) => {
+      arr = arr.map((a) =>
+        Object.assign(
+          {
+            name: a.shelf_name,
+            color: 'var(--van-black)'
+          },
+          a
+        )
+      );
+      console.log(arr);
       state.shelfs = arr;
     },
     books: (state, data) => {
@@ -35,6 +45,10 @@ const ShelfModule = {
     },
     getBooks: async ({ state, commit }, query) => {
       const { currentShelf, page } = query;
+      state.currentShelf = currentShelf;
+      state.shelfs.map((s, i) => {
+        i === currentShelf ? (s.color = 'var(--van-blue)') : (s.color = 'var(--van-black)');
+      });
       const res = await getShelfBookList(state.shelfs[currentShelf].shelf_id, page);
       commit('books', {
         books: res.book_list,
