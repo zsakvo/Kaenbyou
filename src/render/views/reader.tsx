@@ -33,7 +33,6 @@ export default defineComponent({
     const store = useStore();
     const catalogWrapper = ref(null);
     BScroll.use(ScrollBar);
-    let scroll;
     const state = reactive({
       bid: '',
       cid: '',
@@ -104,6 +103,12 @@ export default defineComponent({
     onUnmounted(() => {
       clearInterval();
     });
+    const initScroll = () => {
+      new BScroll(catalogWrapper.value as any, {
+        scrollY: true,
+        scrollbar: true
+      });
+    };
     const getChapters = async (book_id: any) => {
       const res: any = await getDivisionList(book_id);
       const divisions = res.division_list;
@@ -113,14 +118,7 @@ export default defineComponent({
         state.chapters = state.chapters.concat(res.chapter_list);
       }
       await nextTick();
-      try {
-        scroll = new BScroll(catalogWrapper.value as any, {
-          scrollY: true,
-          scrollbar: true
-        });
-      } catch (e) {
-        console.log(e);
-      }
+      initScroll();
     };
     const fetchContent = async (cid) => {
       const res = await getContent(cid, state.bid);
