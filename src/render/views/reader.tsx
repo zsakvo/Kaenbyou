@@ -82,22 +82,16 @@ export default defineComponent({
       background: themeConfig.themes[1].content
     });
     const goBack = () => {
-      router.back();
+      store.commit('reader/hidePopup');
+      setTimeout(() => router.back(), 300);
     };
     onMounted(async () => {
-      console.log(store);
-      // const now = dayjs();
-      // console.log(now.hour());
-      // console.log(now.minute());
       state.bid = route.query.bid as string;
       state.cid = route.query.cid as string;
       state.bookName = route.params.bookName as string;
       setInterval(() => {
         state.now = dayjs();
       }, 1000 * 60);
-      // getDivisionList(state.bid).then((res) => {
-      //   state.divisionList = res.division_list
-      // })
       await getChapters(state.bid);
       fetchContent(state.cid);
     });
