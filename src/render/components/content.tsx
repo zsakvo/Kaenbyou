@@ -33,7 +33,7 @@ export default defineComponent({
     const scrollWrapper = ref(null);
     BScroll.use(ScrollBar);
     let scroll;
-    const onScrollClick = (e: MouseEvent) => {
+    const onScrollClick = (e: IMouseEvent) => {
       if (!e._constructed) {
         return;
       }
@@ -164,3 +164,7 @@ export default defineComponent({
     );
   }
 });
+
+interface IMouseEvent extends MouseEvent {
+  _constructed: boolean;
+}
