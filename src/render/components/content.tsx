@@ -2,6 +2,7 @@ import { defineComponent, onMounted, reactive, nextTick, ref } from 'vue';
 import { PullRefresh } from 'vant';
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
+import PullDown from '@better-scroll/pull-down';
 import { useStore } from 'vuex';
 
 export default defineComponent({
@@ -29,7 +30,9 @@ export default defineComponent({
       refreshing: false
     });
     const scrollWrapper = ref(null);
+    const tipText = ref('');
     BScroll.use(ScrollBar);
+    BScroll.use(PullDown);
     let scroll;
     const onScrollClick = (e: IMouseEvent) => {
       if (!e._constructed) {
@@ -55,6 +58,27 @@ export default defineComponent({
         }
       }
     };
+    const PHASE = {
+      moving: {
+        enter: 'enter',
+        leave: 'leave'
+      },
+      fetching: 'fetching',
+      succeed: 'succeed'
+    };
+    const pullingDownHandler = async () => {
+      setTipText(PHASE.fetching);
+      await nextTick();
+    };
+    const setTipText = (phase) => {
+      const TEXTS_MAP = {
+        enter: '下拉上一章',
+        leave: '松手上一章',
+        fetching: '正在读取数据',
+        succeed: '读取成功'
+      };
+      tipText.value = TEXTS_MAP[phase];
+    };
     onMounted(() => {
       nextTick().then(() => {
         scroll = new BScroll(scrollWrapper.value as any, {
@@ -66,11 +90,20 @@ export default defineComponent({
             stop: 45
           }
         });
+        scroll.on('pullingDown', pullingDownHandler);
+        // scroll.on('scrollEnd', () => {});
+        // v2.4.0 supported
+        scroll.on('enterThreshold', () => {
+          setTipText(PHASE.moving.enter);
+        });
+        scroll.on('leaveThreshold', () => {
+          setTipText(PHASE.moving.leave);
+        });
         const hooks = scroll.scroller.actionsHandler.hooks;
         hooks.on('click', onScrollClick);
       });
     });
-    return { state, scrollWrapper };
+    return { state, scrollWrapper, tipText };
   },
   render() {
     return (
@@ -87,6 +120,21 @@ export default defineComponent({
         }}
       >
         <div>
+          <div
+            style={{
+              position: 'absolute',
+              width: '100%',
+              padding: '32px',
+              paddingBottom: '4px',
+              boxSizing: 'border-box',
+              transform: 'translateY(-100%) translateZ(0)',
+              textAlign: 'center',
+              color: '#999',
+              fontSize: '13px'
+            }}
+          >
+            <div>{this.tipText}</div>
+          </div>
           <div
             style={{
               fontSize: '18px',
