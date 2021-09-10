@@ -1,4 +1,4 @@
-import { computed, defineComponent, onMounted, onUnmounted, reactive } from 'vue';
+import { computed, defineComponent, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { Popup, Icon, Loading } from 'vant';
 import Content from '@/components/Content';
 import themeConfig from '@/plugins/themes';
@@ -17,6 +17,9 @@ import readerSettingsIcon from '@/assets/imgs/read_settings.png';
 import dayjs from 'dayjs';
 import { useStore } from 'vuex';
 
+import BScroll from '@better-scroll/core';
+import ScrollBar from '@better-scroll/scroll-bar';
+
 export default defineComponent({
   components: {
     Content,
@@ -28,6 +31,9 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
+    const catalogWrapper = ref(null);
+    BScroll.use(ScrollBar);
+    let scroll;
     const state = reactive({
       bid: '',
       cid: '',
@@ -106,6 +112,8 @@ export default defineComponent({
         const res = (await getChapterByDivisionId(did, state.bid)) as any;
         state.chapters = state.chapters.concat(res.chapter_list);
       }
+      await nextTick();
+      scroll = new BScroll(catalogWrapper as any, {});
     };
     const fetchContent = async (cid) => {
       const res = await getContent(cid, state.bid);
@@ -164,7 +172,8 @@ export default defineComponent({
       popupHandler,
       goBack,
       jumpChapter,
-      showCatalog
+      showCatalog,
+      catalogWrapper
     };
   },
   render() {
@@ -252,6 +261,31 @@ export default defineComponent({
               class={[styles.icon, styles.iconMLeft]}
               alt=""
             />
+          </div>
+        </div>
+        <div
+          class={styles.catalog}
+          style={{
+            background: themeConfig.themes[1].body,
+            color: '#94742c',
+            boxShadow: this.state.showPopup ? 'rgb(0 0 0 / 20%) 0px 0px 8px 1px' : 'none'
+          }}
+        >
+          <div class={styles.bookName}>{this.state.bookName}</div>
+          <div ref="catalogWrapper" style={{ height: '80vh', overflow: 'hidden' }}>
+            <div class={styles.cataWrapper}>
+              {this.state.chapters.map((cata: any) => (
+                <div
+                  onClick={() => this.jumpChapter(cata.chapter_id)}
+                  class={[
+                    styles.cata,
+                    cata.chapter_id === this.state.cid ? styles.cataSelected : null
+                  ]}
+                >
+                  {cata.chapter_title}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

@@ -174,7 +174,14 @@
     }
   }
 
-  .catalog-popup {
+  .catalog {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 64vw;
+    z-index: 100;
+    padding-top: 20px;
     .book-name {
       margin: 0 20px;
       font-size: 16px;
@@ -184,8 +191,8 @@
     .cata-wrapper {
       margin-top: 16px;
       padding: 0 20px;
-      height: calc(100vh - 84px);
-      overflow: auto;
+      // height: calc(100vh - 84px);
+      // overflow: auto;
       .cata {
         padding: 10px 0;
         font-size: 14px;
