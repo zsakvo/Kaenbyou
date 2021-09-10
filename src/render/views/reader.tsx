@@ -41,7 +41,8 @@ export default defineComponent({
       showBottomPopup: false,
       showCatalog: false,
       canPopup: true,
-      now: dayjs()
+      now: dayjs(),
+      showPopup: false
     });
     const icons = {
       arrowLeftIcon,
@@ -55,7 +56,7 @@ export default defineComponent({
     const pageStyle = reactive({
       width: '100vw',
       height: '100vh',
-      background: themeConfig.themes[1].body
+      background: themeConfig.themes[1].content
     });
 
     const topBarStyle = reactive({
@@ -175,7 +176,7 @@ export default defineComponent({
         <div
           class={styles.topInfo}
           style={{
-            background: themeConfig.themes[1].body,
+            background: themeConfig.themes[1].content,
             color: '#978042'
           }}
         >
@@ -184,7 +185,7 @@ export default defineComponent({
         <div
           class={styles.bottomInfo}
           style={{
-            background: themeConfig.themes[1].body,
+            background: themeConfig.themes[1].content,
             color: '#978042'
           }}
         >
@@ -208,8 +209,54 @@ export default defineComponent({
             title={this.state.title}
             content={this.state.content}
             authorSay={this.state.authorSay}
+            showPopup={() => {
+              console.log('切换 popup');
+              this.state.showPopup = !this.state.showPopup;
+            }}
           />
         )}
+        <div
+          class={styles.topBar}
+          style={{
+            background: themeConfig.themes[1].body,
+            color: '#94742c',
+            top: this.state.showPopup ? '0' : '-42px',
+            boxShadow: this.state.showPopup ? 'rgb(0 0 0 / 20%) 0px 0px 8px 1px' : 'none'
+          }}
+        >
+          <div class={styles.backIcon} onClick={this.goBack}>
+            <Icon name="arrow-left" size="22" />
+          </div>
+        </div>
+        <div
+          class={styles.bottomBar}
+          style={{
+            background: themeConfig.themes[1].body,
+            color: '#94742c',
+            bottom: this.state.showPopup ? '0' : '-100px',
+            boxShadow: this.state.showPopup ? 'rgb(0 0 0 / 20%) 0px 0px 8px 1px' : 'none'
+          }}
+        >
+          <div class={styles.firstLine}>
+            <img src={this.icons.arrowLeftIcon} alt="" class={[styles.arrow, styles.arrowLeft]} />
+            <div class={styles.vipDesc}>
+              <img src={this.icons.vipIcon} alt="" class={styles.descIcon} />
+              <div class={styles.descText}>5523 人订阅</div>
+            </div>
+            <img src={this.icons.arrowRightIcon} alt="" class={[styles.arrow, styles.right]} />
+          </div>
+          <div class={styles.secLine}>
+            <img src={this.icons.menuIcon} class={styles.icon} alt="" onClick={this.showCatalog} />
+            <div class={styles.readDesc}> 已读 56% </div>
+            <img src={this.icons.moonIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
+            <img src={this.icons.bookmarkIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
+            <img
+              src={this.icons.readerSettingsIcon}
+              class={[styles.icon, styles.iconMLeft]}
+              alt=""
+            />
+          </div>
+        </div>
       </div>
     );
   }

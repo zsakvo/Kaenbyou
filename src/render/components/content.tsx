@@ -20,15 +20,37 @@ export default defineComponent({
     authorSay: {
       type: String,
       default: null
+    },
+    showPopup: {
+      type: Function,
+      default: () => {}
     }
   },
-  setup() {
+  setup(props) {
     const state = reactive({
       refreshing: false
     });
     const scrollWrapper = ref(null);
     BScroll.use(ScrollBar);
     let scroll;
+    const onScrollClick = (e: MouseEvent) => {
+      if (!e._constructed) {
+        return;
+      }
+      const { innerWidth, innerHeight } = window;
+      const { x, y } = e;
+      console.log(x, y);
+      console.log(innerWidth, innerHeight);
+      if (
+        x > innerWidth / 3 &&
+        x <= (innerWidth * 2) / 3 &&
+        y > innerHeight / 3 &&
+        y <= (innerHeight * 2) / 3
+      ) {
+        console.log('可以呼出菜单');
+        props.showPopup();
+      }
+    };
     onMounted(() => {
       nextTick().then(() => {
         scroll = new BScroll(scrollWrapper.value as any, {
@@ -41,12 +63,7 @@ export default defineComponent({
           }
         });
         const hooks = scroll.scroller.actionsHandler.hooks;
-        hooks.on('click', (e) => {
-          if (!e._constructed) {
-            return;
-          }
-          console.log(e);
-        });
+        hooks.on('click', onScrollClick);
       });
     });
     return { state, scrollWrapper };
