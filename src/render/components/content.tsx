@@ -41,6 +41,8 @@ export default defineComponent({
       console.log(innerWidth, innerHeight);
       if (store.state.reader.showPopup) {
         store.commit('reader/hidePopup');
+      } else if (store.state.reader.showCatalog) {
+        store.commit('reader/hideCatalog');
       } else {
         if (
           x > innerWidth / 3 &&

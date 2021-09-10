@@ -47,10 +47,10 @@ export default defineComponent({
       chapterIndex: 0,
       showTopPopup: false,
       showBottomPopup: false,
-      showCatalog: false,
       canPopup: true,
       now: dayjs(),
-      showPopup: computed(() => store.state.reader.showPopup)
+      showPopup: computed(() => store.state.reader.showPopup),
+      showCatalog: computed(() => store.state.reader.showCatalog)
     });
     const icons = {
       arrowLeftIcon,
@@ -113,7 +113,14 @@ export default defineComponent({
         state.chapters = state.chapters.concat(res.chapter_list);
       }
       await nextTick();
-      scroll = new BScroll(catalogWrapper as any, {});
+      try {
+        scroll = new BScroll(catalogWrapper.value as any, {
+          scrollY: true,
+          scrollbar: true
+        });
+      } catch (e) {
+        console.log(e);
+      }
     };
     const fetchContent = async (cid) => {
       const res = await getContent(cid, state.bid);
@@ -141,6 +148,7 @@ export default defineComponent({
       }
     };
     const jumpChapter = async (cid) => {
+      store.commit('reader/hideCatalog');
       state.showCatalog = false;
       state.showTopPopup = false;
       state.showBottomPopup = false;
@@ -159,8 +167,7 @@ export default defineComponent({
       });
     };
     const showCatalog = () => {
-      state.showCatalog = true;
-      // popBars = false
+      store.commit('reader/showCatalog');
     };
     return {
       state,
@@ -268,11 +275,15 @@ export default defineComponent({
           style={{
             background: themeConfig.themes[1].body,
             color: '#94742c',
-            boxShadow: this.state.showPopup ? 'rgb(0 0 0 / 20%) 0px 0px 8px 1px' : 'none'
+            left: this.state.showCatalog ? '0' : '-75vw',
+            boxShadow: this.state.showCatalog ? 'rgb(0 0 0 / 20%) 0px 0px 8px 1px' : 'none'
           }}
         >
           <div class={styles.bookName}>{this.state.bookName}</div>
-          <div ref="catalogWrapper" style={{ height: '80vh', overflow: 'hidden' }}>
+          <div
+            ref="catalogWrapper"
+            style={{ height: 'calc(100vh - 124px)', overflow: 'hidden', position: 'relative' }}
+          >
             <div class={styles.cataWrapper}>
               {this.state.chapters.map((cata: any) => (
                 <div
