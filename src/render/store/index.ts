@@ -1,6 +1,7 @@
 import { state } from './state';
 import { createStore } from 'vuex';
-import ShelfModule from './modules/Shelf';
+import ShelfModule from './modules/shelf';
+import ReaderModule from './modules/reader';
 
 export default createStore({
   state,
@@ -8,6 +9,7 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {
-    shelf: ShelfModule
+    shelf: ShelfModule,
+    reader: ReaderModule
   }
 });

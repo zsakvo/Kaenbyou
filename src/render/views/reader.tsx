@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, onUnmounted, reactive } from 'vue';
+import { computed, defineComponent, onMounted, onUnmounted, reactive } from 'vue';
 import { Popup, Icon, Loading } from 'vant';
 import Content from '@/components/Content';
 import themeConfig from '@/plugins/themes';
@@ -15,6 +15,7 @@ import moonIcon from '@/assets/imgs/moon.png';
 import bookmarkIcon from '@/assets/imgs/bookmark.png';
 import readerSettingsIcon from '@/assets/imgs/read_settings.png';
 import dayjs from 'dayjs';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   components: {
@@ -26,6 +27,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
+    const store = useStore();
     const state = reactive({
       bid: '',
       cid: '',
@@ -42,7 +44,7 @@ export default defineComponent({
       showCatalog: false,
       canPopup: true,
       now: dayjs(),
-      showPopup: false
+      showPopup: computed(() => store.state.reader.showPopup)
     });
     const icons = {
       arrowLeftIcon,
@@ -83,6 +85,7 @@ export default defineComponent({
       router.back();
     };
     onMounted(async () => {
+      console.log(store);
       // const now = dayjs();
       // console.log(now.hour());
       // console.log(now.minute());
@@ -209,10 +212,10 @@ export default defineComponent({
             title={this.state.title}
             content={this.state.content}
             authorSay={this.state.authorSay}
-            showPopup={() => {
-              console.log('切换 popup');
-              this.state.showPopup = !this.state.showPopup;
-            }}
+            // showPopup={() => {
+            //   console.log('切换 popup');
+            //   this.state.showPopup = !this.state.showPopup;
+            // }}
           />
         )}
         <div

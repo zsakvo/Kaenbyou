@@ -2,6 +2,7 @@ import { defineComponent, onMounted, reactive, nextTick, ref } from 'vue';
 import { PullRefresh } from 'vant';
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'Content',
@@ -20,13 +21,10 @@ export default defineComponent({
     authorSay: {
       type: String,
       default: null
-    },
-    showPopup: {
-      type: Function,
-      default: () => {}
     }
   },
-  setup(props) {
+  setup() {
+    const store = useStore();
     const state = reactive({
       refreshing: false
     });
@@ -41,14 +39,18 @@ export default defineComponent({
       const { x, y } = e;
       console.log(x, y);
       console.log(innerWidth, innerHeight);
-      if (
-        x > innerWidth / 3 &&
-        x <= (innerWidth * 2) / 3 &&
-        y > innerHeight / 3 &&
-        y <= (innerHeight * 2) / 3
-      ) {
-        console.log('可以呼出菜单');
-        props.showPopup();
+      if (store.state.reader.showPopup) {
+        store.commit('reader/hidePopup');
+      } else {
+        if (
+          x > innerWidth / 3 &&
+          x <= (innerWidth * 2) / 3 &&
+          y > innerHeight / 3 &&
+          y <= (innerHeight * 2) / 3
+        ) {
+          console.log('可以呼出菜单');
+          store.commit('reader/showPopup');
+        }
       }
     };
     onMounted(() => {
