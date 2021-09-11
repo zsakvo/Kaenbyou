@@ -22,9 +22,17 @@ export default defineComponent({
     authorSay: {
       type: String,
       default: null
+    },
+    onPullDown: {
+      type: Function,
+      default: () => {}
+    },
+    onPullOn: {
+      type: Function,
+      default: () => {}
     }
   },
-  setup() {
+  setup(props) {
     const store = useStore();
     const state = reactive({
       refreshing: false
@@ -68,7 +76,11 @@ export default defineComponent({
     };
     const pullingDownHandler = async () => {
       setTipText(PHASE.fetching);
-      await nextTick();
+      // await nextTick();
+      props.onPullDown();
+    };
+    const finishPullDown = () => {
+      scroll.finishPullDown();
     };
     const setTipText = (phase) => {
       const TEXTS_MAP = {
@@ -86,7 +98,7 @@ export default defineComponent({
           click: true,
           scrollbar: true,
           pullDownRefresh: {
-            threshold: 90,
+            threshold: 72,
             stop: 45
           }
         });
@@ -103,7 +115,7 @@ export default defineComponent({
         hooks.on('click', onScrollClick);
       });
     });
-    return { state, scrollWrapper, tipText };
+    return { state, scrollWrapper, tipText, finishPullDown };
   },
   render() {
     return (

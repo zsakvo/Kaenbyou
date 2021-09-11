@@ -32,6 +32,7 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const catalogWrapper = ref(null);
+    const contentEle = ref(null as any);
     BScroll.use(ScrollBar);
     const state = reactive({
       bid: '',
@@ -42,7 +43,7 @@ export default defineComponent({
       content: '',
       authorSay: '',
       bookName: '',
-      chapters: [],
+      chapters: [] as any,
       chapterIndex: 0,
       showTopPopup: false,
       showBottomPopup: false,
@@ -125,7 +126,7 @@ export default defineComponent({
       state.title = res.chapter_info.chapter_title;
       state.content = res.chapter_info.txt_content;
       state.authorSay = res.chapter_info.author_say;
-      state.chapterIndex = res.chapter_info.chapter_index;
+      state.chapterIndex = state.chapters.findIndex((item) => item.chapter_id === cid);
     };
     const popupHandler = () => {
       const lastCanPopup = state.canPopup;
@@ -167,6 +168,16 @@ export default defineComponent({
     const showCatalog = () => {
       store.commit('reader/showCatalog');
     };
+    const loadPrevCpt = () => {
+      console.log('读取上一章...');
+      if (state.chapterIndex == 0) {
+        contentEle.value!.finishPullDown();
+      } else {
+        state.chapterIndex--;
+        console.log(state.chapterIndex);
+        jumpChapter(state.chapters[state.chapterIndex].chapter_id);
+      }
+    };
     return {
       state,
       icons,
@@ -178,7 +189,9 @@ export default defineComponent({
       goBack,
       jumpChapter,
       showCatalog,
-      catalogWrapper
+      catalogWrapper,
+      contentEle,
+      loadPrevCpt
     };
   },
   render() {
@@ -220,6 +233,8 @@ export default defineComponent({
             title={this.state.title}
             content={this.state.content}
             authorSay={this.state.authorSay}
+            onPullDown={this.loadPrevCpt}
+            ref="contentEle"
             // showPopup={() => {
             //   console.log('切换 popup');
             //   this.state.showPopup = !this.state.showPopup;
