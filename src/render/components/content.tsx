@@ -3,6 +3,7 @@ import { PullRefresh } from 'vant';
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
 import PullDown from '@better-scroll/pull-down';
+import Pullup from '@better-scroll/pull-up';
 import { useStore } from 'vuex';
 
 export default defineComponent({
@@ -41,6 +42,7 @@ export default defineComponent({
     const tipText = ref('');
     BScroll.use(ScrollBar);
     BScroll.use(PullDown);
+    BScroll.use(Pullup);
     let scroll;
     const onScrollClick = (e: IMouseEvent) => {
       if (!e._constructed) {
