@@ -178,6 +178,16 @@ export default defineComponent({
         jumpChapter(state.chapters[state.chapterIndex].chapter_id);
       }
     };
+    const loadNextCpt = () => {
+      console.log('读取下一章...');
+      if (state.chapterIndex == state.chapters.length - 1) {
+        contentEle.value!.finishPullOn();
+      } else {
+        state.chapterIndex++;
+        console.log(state.chapterIndex);
+        jumpChapter(state.chapters[state.chapterIndex].chapter_id);
+      }
+    };
     return {
       state,
       icons,
@@ -191,7 +201,8 @@ export default defineComponent({
       showCatalog,
       catalogWrapper,
       contentEle,
-      loadPrevCpt
+      loadPrevCpt,
+      loadNextCpt
     };
   },
   render() {
@@ -234,6 +245,7 @@ export default defineComponent({
             content={this.state.content}
             authorSay={this.state.authorSay}
             onPullDown={this.loadPrevCpt}
+            onPullOn={this.loadNextCpt}
             ref="contentEle"
             // showPopup={() => {
             //   console.log('切换 popup');

@@ -36,7 +36,9 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
     const state = reactive({
-      refreshing: false
+      refreshing: false,
+      loading: false,
+      isPullUpLoad: false
     });
     const scrollWrapper = ref(null);
     const tipText = ref('');
@@ -93,18 +95,31 @@ export default defineComponent({
       };
       tipText.value = TEXTS_MAP[phase];
     };
+    const pullingUpHandler = async () => {
+      state.loading = true;
+      await props.onPullOn();
+    };
+    const finishPullUp = () => {
+      scroll.finishPullUp();
+      scroll.refresh();
+      state.loading = false;
+    };
     onMounted(() => {
       nextTick().then(() => {
         scroll = new BScroll(scrollWrapper.value as any, {
           scrollY: true,
           click: true,
           scrollbar: true,
+          pullUpLoad: {
+            threshold: -96
+          },
           pullDownRefresh: {
             threshold: 72,
             stop: 45
           }
         });
         scroll.on('pullingDown', pullingDownHandler);
+        scroll.on('pullingUp', pullingUpHandler);
         // scroll.on('scrollEnd', () => {});
         // v2.4.0 supported
         scroll.on('enterThreshold', () => {
@@ -117,7 +132,7 @@ export default defineComponent({
         hooks.on('click', onScrollClick);
       });
     });
-    return { state, scrollWrapper, tipText, finishPullDown };
+    return { state, scrollWrapper, tipText, finishPullDown, finishPullUp };
   },
   render() {
     return (
@@ -225,6 +240,24 @@ export default defineComponent({
                 }}
               ></div>
             )}
+            <div
+              class="pullup-tips"
+              style={{
+                textAlign: 'center',
+                color: '#999',
+                fontSize: '13px'
+              }}
+            >
+              {this.state.loading ? (
+                <div class="before-trigger">
+                  <span class="pullup-txt">上拉加载下一章</span>
+                </div>
+              ) : (
+                <div class="after-trigger">
+                  <span class="pullup-txt">读取数据中...</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
