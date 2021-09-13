@@ -125,6 +125,7 @@ export default defineComponent({
         ref="scrollWrapper"
         style={{
           height: 'calc(100vh - 84px)',
+          width: '100vw',
           overflow: 'hidden',
           position: 'absolute',
           marginTop: '42px',
