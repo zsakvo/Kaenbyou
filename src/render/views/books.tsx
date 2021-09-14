@@ -1,4 +1,4 @@
-import { defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
+import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue';
 import { Icon } from 'vant';
 import rankIcon from '@/assets/imgs/endless.png';
 import freeIcon from '@/assets/imgs/loading.png';
@@ -22,7 +22,7 @@ export default defineComponent({
     const pullWrapper = ref(null);
     const route = useRoute();
     BScroll.use(ScrollBar);
-    let scroll;
+    // let scroll;
     const state = reactive({
       title: '书籍列表',
       count: 0,
@@ -35,17 +35,17 @@ export default defineComponent({
         listIcon
       }
     });
-    onMounted(() => {
+    onMounted(async () => {
       console.log('初始化排行');
       console.log(route.query.title);
       store.state.rank.ranks.forEach((r) => {
-        console.log(r);
         if (r.title === route.query.title) {
           state.title = r.title;
           state.books = r.books;
         }
       });
-      scroll = new BScroll(pullWrapper.value as any, {
+      await nextTick();
+      new BScroll(pullWrapper.value as any, {
         scrollY: true,
         scrollbar: true
       });
@@ -60,13 +60,6 @@ export default defineComponent({
     const goBack = () => {
       router.go(-1);
     };
-    watch(
-      () => state.books,
-      async () => {
-        await nextTick();
-        scroll.refresh();
-      }
-    );
     return { state, onRefresh, active, pullWrapper, toModuleAll, goBack };
   },
 
@@ -85,7 +78,7 @@ export default defineComponent({
             class={styles.pullWrapper}
             ref="pullWrapper"
             style={{
-              marginTop: '16px',
+              marginTop: '0',
               height: 'calc(100vh - 94px)'
             }}
           >
