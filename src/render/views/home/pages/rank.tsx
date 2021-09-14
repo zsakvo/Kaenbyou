@@ -9,6 +9,7 @@ import styles from '@/style/rank.module.scss';
 import { useStore } from 'vuex';
 import { Rank } from 'src/typings/interface';
 import BScroll, { ScrollBar } from 'better-scroll';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   components: {
@@ -18,6 +19,7 @@ export default defineComponent({
     const store = useStore();
     const active = ref(0);
     const pullWrapper = ref(null);
+    const router = useRouter();
     BScroll.use(ScrollBar);
     let scroll;
     const state = reactive({
@@ -42,6 +44,14 @@ export default defineComponent({
     const onRefresh = async () => {
       state.loading = false;
     };
+    const toModuleAll = (rank) => {
+      console.log('跳转全部');
+      console.log(rank);
+      router.push({
+        name: 'Books',
+        query: { title: rank.title }
+      });
+    };
     watch(
       () => state.ranks,
       async () => {
@@ -49,7 +59,7 @@ export default defineComponent({
         scroll.refresh();
       }
     );
-    return { state, onRefresh, active, pullWrapper };
+    return { state, onRefresh, active, pullWrapper, toModuleAll };
   },
 
   render() {
@@ -164,7 +174,10 @@ export default defineComponent({
                 <div class={styles.ranks}>
                   <div class={styles.rankHeader}>
                     <div class={styles.title}> {rank.title} </div>
-                    <div class={styles.all}> 全部 </div>
+                    <div class={styles.all} onClick={() => this.toModuleAll(rank)}>
+                      {' '}
+                      全部{' '}
+                    </div>
                     <Icon name="arrow" class={styles.icon} />
                   </div>
                   <div class={styles.booksWrapper}>

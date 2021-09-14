@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('../views/reader')
   },
   {
+    path: '/books',
+    name: 'Books',
+    component: () => import('../views/books')
+  },
+  {
     path: '/about',
     name: 'About',
     component: () => import('../views/about')
