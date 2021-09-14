@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, reactive, ref } from 'vue';
+import { computed, defineComponent, onMounted, reactive, ref } from 'vue';
 import { Icon, PullRefresh } from 'vant';
 import rankIcon from '@/assets/imgs/endless.png';
 import freeIcon from '@/assets/imgs/loading.png';
@@ -7,6 +7,7 @@ import listIcon from '@/assets/imgs/device.png';
 
 import styles from '@/style/rank.module.scss';
 import { useStore } from 'vuex';
+import { Rank } from 'src/typings/interface';
 
 export default defineComponent({
   components: {
@@ -19,6 +20,7 @@ export default defineComponent({
     const state = reactive({
       count: 0,
       loading: false,
+      ranks: computed(() => store.state.rank.ranks),
       icons: {
         rankIcon,
         freeIcon,
@@ -155,27 +157,28 @@ export default defineComponent({
                 </div>
               </div>
             </div>
-            <div class={styles.ranks}>
-              <div class={styles.rankHeader}>
-                <div class={styles.title}> 热度榜 </div>
-                <div class={styles.all}> 全部 </div>
-                <Icon name="arrow" class={styles.icon} />
-              </div>
-              <div class={styles.booksWrapper}>
-                <div class={styles.bookCard}>
-                  <div class={styles.cover}>
-                    <img
-                      src="https://c1.kuangxiangit.com/uploads/allimg/c200420/20-04-20105231-97332-100162990.jpg"
-                      alt=""
-                    />
-                  </div>
-                  <div class={styles.info}>
-                    <div class={styles.name}>勇者爱丽丝的社会性死亡传说</div>
-                    <div class={styles.author}>才不是 H 萝莉</div>
-                  </div>
+            {this.state.ranks.map((rank: Rank) => (
+              <div class={styles.ranks}>
+                <div class={styles.rankHeader}>
+                  <div class={styles.title}> {rank.title} </div>
+                  <div class={styles.all}> 全部 </div>
+                  <Icon name="arrow" class={styles.icon} />
+                </div>
+                <div class={styles.booksWrapper}>
+                  {rank.books.slice(0, 3).map((book) => (
+                    <div class={styles.bookCard}>
+                      <div class={styles.cover}>
+                        <img src={book.cover} alt="" />
+                      </div>
+                      <div class={styles.info}>
+                        <div class={styles.name}>{book.bookName}</div>
+                        <div class={styles.author}>{book.author}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
+            ))}
           </PullRefresh>
         </div>
       </>

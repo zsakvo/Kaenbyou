@@ -6,3 +6,9 @@ export interface Book {
   author?: string;
   description?: string;
 }
+
+export interface Rank {
+  title: string;
+  introduce: string;
+  books: Book[];
+}
