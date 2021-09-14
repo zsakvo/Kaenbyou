@@ -1,4 +1,4 @@
-import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue';
+import { computed, defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import { Icon } from 'vant';
 import rankIcon from '@/assets/imgs/endless.png';
 import freeIcon from '@/assets/imgs/loading.png';
@@ -44,7 +44,8 @@ export default defineComponent({
     };
     watch(
       () => state.ranks,
-      () => {
+      async () => {
+        await nextTick();
         scroll.refresh();
       }
     );
