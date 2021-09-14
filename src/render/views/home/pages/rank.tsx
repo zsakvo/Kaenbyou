@@ -1,12 +1,12 @@
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, onMounted, reactive, ref } from 'vue';
 import { Icon, PullRefresh } from 'vant';
-import { getIndexList } from '@/api';
 import rankIcon from '@/assets/imgs/endless.png';
 import freeIcon from '@/assets/imgs/loading.png';
 import discountIcon from '@/assets/imgs/tag.png';
 import listIcon from '@/assets/imgs/device.png';
 
 import styles from '@/style/rank.module.scss';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   components: {
@@ -14,6 +14,7 @@ export default defineComponent({
     [Icon.name]: Icon
   },
   setup() {
+    const store = useStore();
     const active = ref(0);
     const state = reactive({
       count: 0,
@@ -25,13 +26,19 @@ export default defineComponent({
         listIcon
       }
     });
+    onMounted(() => {
+      console.log('初始化排行');
+      store.dispatch('rank/init', {});
+      setTimeout(() => {
+        console.log(store);
+      }, 5000);
+    });
     const onRefresh = async () => {
       // setTimeout(() => {
       //   Toast('刷新成功')
       //   state.loading = false
       //   state.count++
       // }, 1000)
-      await getIndexList();
       state.loading = false;
     };
     return { state, onRefresh, active };

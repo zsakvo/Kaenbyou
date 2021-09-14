@@ -2,6 +2,7 @@ import { state } from './state';
 import { createStore } from 'vuex';
 import ShelfModule from './modules/shelf';
 import ReaderModule from './modules/reader';
+import RankModule from './modules/rank';
 
 export default createStore({
   state,
@@ -10,6 +11,7 @@ export default createStore({
   actions: {},
   modules: {
     shelf: ShelfModule,
-    reader: ReaderModule
+    reader: ReaderModule,
+    rank: RankModule
   }
 });
