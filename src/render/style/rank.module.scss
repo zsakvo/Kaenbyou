@@ -19,60 +19,31 @@
     height: calc(86vh - 48px);
     .menus {
       padding: 24px 0;
+      margin: 4px 0;
       margin: 0 18px;
       display: flex;
       align-items: center;
       justify-content: space-around;
       .menu {
+        flex: 1;
         display: flex;
-        flex-direction: column;
         align-items: center;
-        .menu-icon {
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          background: #66ccff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          img {
-            width: 56%;
-            height: 56%;
-          }
-        }
-        .menu-icon-rank {
-          background: rgb(0 150 136 / 20%);
-          img {
-            filter: invert(54%) sepia(84%) saturate(6088%) hue-rotate(155deg) brightness(95%)
-              contrast(101%);
-          }
-        }
-        .menu-icon-free {
-          background: rgb(33 150 243 / 20%);
-          img {
-            filter: invert(46%) sepia(23%) saturate(3994%) hue-rotate(185deg) brightness(100%)
-              contrast(91%);
-          }
-        }
-        .menu-icon-discount {
-          background: rgb(244 67 54 / 20%);
-          img {
-            filter: invert(49%) sepia(73%) saturate(6094%) hue-rotate(342deg) brightness(99%)
-              contrast(93%);
-          }
-        }
-        .menu-icon-list {
-          background: rgb(255 152 0 / 20%);
-          img {
-            filter: invert(48%) sepia(98%) saturate(508%) hue-rotate(357deg) brightness(109%)
-              contrast(108%);
-          }
+        justify-content: center;
+        padding: 10px 0;
+        border-radius: 4px;
+        margin: 0 6px;
+        .icon {
+          width: 24px;
+          height: 24px;
         }
         .menu-text {
-          margin-top: 6px;
+          margin: 0 8px;
           font-size: 12px;
           color: var(--van-gray-7);
         }
+      }
+      .menu-rank {
+        background: rgb(0 150 136 / 20%);
       }
     }
     .ranks {

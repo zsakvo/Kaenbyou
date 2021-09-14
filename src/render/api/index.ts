@@ -68,3 +68,13 @@ export const getContent = async (chapter_id: string, book_id: string) => {
 export const getMyInfo = async () => {
   return get('/reader/get_my_info');
 };
+
+/**
+ * 获取书城首页
+ */
+export const getIndexInfo = async () => {
+  return get('/bookcity/get_index_list', {
+    tab_type: 200,
+    theme_type: 'NORMAL'
+  });
+};

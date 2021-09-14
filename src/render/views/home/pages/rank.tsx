@@ -1,10 +1,10 @@
 import { defineComponent, reactive, ref } from 'vue';
 import { Icon, PullRefresh } from 'vant';
 import { getIndexList } from '@/api';
-import rankIcon from '@/assets/imgs/rank.png';
-import freeIcon from '@/assets/imgs/free.png';
-import discountIcon from '@/assets/imgs/discount.png';
-import listIcon from '@/assets/imgs/list.png';
+import rankIcon from '@/assets/imgs/endless.png';
+import freeIcon from '@/assets/imgs/loading.png';
+import discountIcon from '@/assets/imgs/tag.png';
+import listIcon from '@/assets/imgs/device.png';
 
 import styles from '@/style/rank.module.scss';
 
@@ -51,29 +51,101 @@ export default defineComponent({
             class={styles.pullWrapper}
           >
             <div class={styles.menus}>
-              <div class={styles.menu}>
-                <div class={[styles.menuIcon, styles.menuIconRank]}>
-                  <img src={this.state.icons.rankIcon} alt="" />
+              <div
+                class={styles.menu}
+                style={{
+                  background: 'rgb(87 169 154 / 20%)'
+                }}
+              >
+                <img
+                  style={{
+                    filter:
+                      'invert(54%) sepia(3%) saturate(5640%) hue-rotate(120deg) brightness(115%) contrast(71%)'
+                  }}
+                  class={styles.icon}
+                  src={this.state.icons.rankIcon}
+                  alt=""
+                />
+                <div
+                  class={styles.menuText}
+                  style={{
+                    color: '#57A99A'
+                  }}
+                >
+                  排行
                 </div>
-                <div class={styles.menuText}>排行</div>
               </div>
-              <div class={styles.menu}>
-                <div class={[styles.menuIcon, styles.menuIconFree]}>
-                  <img src={this.state.icons.freeIcon} alt="" />
+              <div
+                class={styles.menu}
+                style={{
+                  background: 'rgb(255 77 77 / 20%)'
+                }}
+              >
+                <img
+                  style={{
+                    filter:
+                      'invert(63%) sepia(60%) saturate(5372%) hue-rotate(330deg) brightness(100%) contrast(103%)'
+                  }}
+                  class={styles.icon}
+                  src={this.state.icons.freeIcon}
+                  alt=""
+                />
+                <div
+                  class={styles.menuText}
+                  style={{
+                    color: '#FF4D4D'
+                  }}
+                >
+                  免费
                 </div>
-                <div class={styles.menuText}>免费</div>
               </div>
-              <div class={styles.menu}>
-                <div class={[styles.menuIcon, styles.menuIconDiscount]}>
-                  <img src={this.state.icons.discountIcon} alt="" />
+              <div
+                class={styles.menu}
+                style={{
+                  background: 'rgb(30 175 237 / 20%)'
+                }}
+              >
+                <img
+                  style={{
+                    filter:
+                      'invert(54%) sepia(93%) saturate(1301%) hue-rotate(165deg) brightness(96%) contrast(92%)'
+                  }}
+                  class={styles.icon}
+                  src={this.state.icons.discountIcon}
+                  alt=""
+                />
+                <div
+                  class={styles.menuText}
+                  style={{
+                    color: '#1EAFED'
+                  }}
+                >
+                  折扣
                 </div>
-                <div class={styles.menuText}>折扣</div>
               </div>
-              <div class={styles.menu}>
-                <div class={[styles.menuIcon, styles.menuIconList]}>
-                  <img src={this.state.icons.listIcon} alt="" />
+              <div
+                class={styles.menu}
+                style={{
+                  background: 'rgb(255 180 0 / 20%)'
+                }}
+              >
+                <img
+                  style={{
+                    filter:
+                      'invert(58%) sepia(99%) saturate(750%) hue-rotate(0deg) brightness(107%) contrast(104%)'
+                  }}
+                  class={styles.icon}
+                  src={this.state.icons.listIcon}
+                  alt=""
+                />
+                <div
+                  class={styles.menuText}
+                  style={{
+                    color: '#FFB400'
+                  }}
+                >
+                  书单
                 </div>
-                <div class={styles.menuText}>书单</div>
               </div>
             </div>
             <div class={styles.ranks}>
