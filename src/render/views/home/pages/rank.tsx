@@ -52,6 +52,13 @@ export default defineComponent({
         query: { title: rank.title }
       });
     };
+    const toDetail = (bid) => {
+      console.log('跳转详情');
+      router.push({
+        name: 'Detail',
+        query: { bid }
+      });
+    };
     watch(
       () => state.ranks,
       async () => {
@@ -59,7 +66,7 @@ export default defineComponent({
         scroll.refresh();
       }
     );
-    return { state, onRefresh, active, pullWrapper, toModuleAll };
+    return { state, onRefresh, active, pullWrapper, toModuleAll, toDetail };
   },
 
   render() {
@@ -182,7 +189,7 @@ export default defineComponent({
                   </div>
                   <div class={styles.booksWrapper}>
                     {rank.books.slice(0, 3).map((book) => (
-                      <div class={styles.bookCard}>
+                      <div class={styles.bookCard} onClick={() => this.toDetail(book.bookId)}>
                         <div class={styles.cover}>
                           <img src={book.cover} alt="" />
                         </div>
