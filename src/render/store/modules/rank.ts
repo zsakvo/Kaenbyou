@@ -31,9 +31,9 @@ const parse = (data: any) => {
       book_id: book['book_id'],
       book_name: book['book_name'],
       cover: book['cover'],
-      category: book['category_index'],
+      category_index: book['category_index'],
       description: book['description'],
-      author: book['author_name']
+      author_name: book['author_name']
     });
   };
   //格式化最新书籍列表

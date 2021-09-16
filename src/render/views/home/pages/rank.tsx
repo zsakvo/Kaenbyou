@@ -195,7 +195,7 @@ export default defineComponent({
                         </div>
                         <div class={styles.info}>
                           <div class={styles.name}>{book.book_name}</div>
-                          <div class={styles.author}>{book.author}</div>
+                          <div class={styles.author}>{book.author_name}</div>
                         </div>
                       </div>
                     ))}
