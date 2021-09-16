@@ -78,3 +78,11 @@ export const getIndexInfo = async () => {
     theme_type: 'NORMAL'
   });
 };
+
+/**
+ * 获取书籍详情
+ * @param {string} book_id - 书籍id
+ */
+export const getInfoById = async (book_id: string) => {
+  return get('/book/get_info_by_id', { book_id });
+};

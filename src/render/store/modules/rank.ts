@@ -28,8 +28,8 @@ const parse = (data: any) => {
   // const upBooks: Book[] = [];
   const pushBooks = (books: Book[], book: any) => {
     books.push({
-      bookId: book['book_id'],
-      bookName: book['book_name'],
+      book_id: book['book_id'],
+      book_name: book['book_name'],
       cover: book['cover'],
       category: book['category_index'],
       description: book['description'],

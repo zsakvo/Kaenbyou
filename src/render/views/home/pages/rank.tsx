@@ -189,12 +189,12 @@ export default defineComponent({
                   </div>
                   <div class={styles.booksWrapper}>
                     {rank.books.slice(0, 3).map((book) => (
-                      <div class={styles.bookCard} onClick={() => this.toDetail(book.bookId)}>
+                      <div class={styles.bookCard} onClick={() => this.toDetail(book.book_id)}>
                         <div class={styles.cover}>
                           <img src={book.cover} alt="" />
                         </div>
                         <div class={styles.info}>
-                          <div class={styles.name}>{book.bookName}</div>
+                          <div class={styles.name}>{book.book_name}</div>
                           <div class={styles.author}>{book.author}</div>
                         </div>
                       </div>
