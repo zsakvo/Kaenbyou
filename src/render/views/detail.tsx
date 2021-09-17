@@ -2,13 +2,14 @@ import { getInfoById } from '@/api';
 import { defineComponent, onMounted, reactive } from '@vue/runtime-dom';
 import { Book } from 'src/typings/interface';
 import { useRoute, useRouter } from 'vue-router';
-import { Icon } from 'vant';
+import { Icon, Button } from 'vant';
 
 import styles from '@/style/detail.module.scss';
 export default defineComponent({
   name: 'Detail',
   components: {
-    [Icon.name]: Icon
+    [Icon.name]: Icon,
+    [Button.name]: Button
   },
   setup() {
     const route = useRoute();
@@ -76,6 +77,14 @@ export default defineComponent({
             </div>
           </div>
           <div class={styles.tagWrapper}></div>
+          <div class={styles.bottomButtons}>
+            <van-button size="small" icon="plus" type="default" class={styles.button}>
+              加入书架
+            </van-button>
+            <van-button size="small" type="primary" class={[styles.button, styles.buttonRead]}>
+              立刻阅读
+            </van-button>
+          </div>
         </div>
       </>
     );
