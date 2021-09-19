@@ -33,7 +33,7 @@ export default defineComponent({
       default: () => {}
     }
   },
-  setup(props) {
+  setup(/*props*/) {
     const store = useStore();
     const state = reactive({
       refreshing: false,
@@ -78,11 +78,11 @@ export default defineComponent({
       fetching: 'fetching',
       succeed: 'succeed'
     };
-    const pullingDownHandler = async () => {
-      setTipText(PHASE.fetching);
-      // await nextTick();
-      props.onPullDown();
-    };
+    // const pullingDownHandler = async () => {
+    //   setTipText(PHASE.fetching);
+    //   // await nextTick();
+    //   props.onPullDown();
+    // };
     const finishPullDown = () => {
       scroll.finishPullDown();
     };
@@ -95,10 +95,10 @@ export default defineComponent({
       };
       tipText.value = TEXTS_MAP[phase];
     };
-    const pullingUpHandler = async () => {
-      state.loading = true;
-      await props.onPullOn();
-    };
+    // const pullingUpHandler = async () => {
+    //   state.loading = true;
+    //   await props.onPullOn();
+    // };
     const finishPullUp = () => {
       scroll.finishPullUp();
       scroll.refresh();
@@ -110,16 +110,16 @@ export default defineComponent({
           scrollY: true,
           click: true,
           scrollbar: true,
-          pullUpLoad: {
-            threshold: -96
-          },
+          // pullUpLoad: {
+          //   threshold: -96
+          // },
           pullDownRefresh: {
             threshold: 72,
             stop: 45
           }
         });
-        scroll.on('pullingDown', pullingDownHandler);
-        scroll.on('pullingUp', pullingUpHandler);
+        // scroll.on('pullingDown', pullingDownHandler);
+        // scroll.on('pullingUp', pullingUpHandler);
         // scroll.on('scrollEnd', () => {});
         // v2.4.0 supported
         scroll.on('enterThreshold', () => {
@@ -244,19 +244,40 @@ export default defineComponent({
               class="pullup-tips"
               style={{
                 textAlign: 'center',
-                color: '#999',
-                fontSize: '13px'
+                color: 'var(--van-gray-8)',
+                fontSize: '14px',
+                display: 'flex',
+                padding: '8px 0',
+                border: '1px solid #cfae4a2e'
               }}
             >
-              {this.state.loading ? (
-                <div class="before-trigger">
-                  <span class="pullup-txt">上拉加载下一章</span>
-                </div>
-              ) : (
-                <div class="after-trigger">
-                  <span class="pullup-txt">读取数据中...</span>
-                </div>
-              )}
+              <div
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                上一章
+              </div>
+              <div
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                目录
+              </div>
+              <div
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                  cursor: 'pointer'
+                }}
+              >
+                下一章
+              </div>
             </div>
           </div>
         </div>
