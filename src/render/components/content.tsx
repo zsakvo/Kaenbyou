@@ -251,16 +251,15 @@ export default defineComponent({
                 border: '1px solid #cfae4a2e',
                 marginBottom: '16px'
               }}
-              onClick={(e) => {
-                console.log(e);
-                this.store.commit('reader/showCatalog');
-              }}
             >
               <div
                 style={{
                   flex: 1,
                   textAlign: 'center',
                   cursor: 'pointer'
+                }}
+                onClick={() => {
+                  this.onPullDown();
                 }}
               >
                 上一章
@@ -273,8 +272,9 @@ export default defineComponent({
                   borderLeft: '1px solid rgba(207, 174, 74, 0.18)',
                   borderRight: '1px solid rgba(207, 174, 74, 0.18)'
                 }}
-                onClick={() => {
-                  this.store.state.reader.showCatalog;
+                onClick={(e) => {
+                  console.log(e);
+                  this.store.commit('reader/showCatalog');
                 }}
               >
                 目录
@@ -284,6 +284,9 @@ export default defineComponent({
                   flex: 1,
                   textAlign: 'center',
                   cursor: 'pointer'
+                }}
+                onClick={() => {
+                  this.onPullOn();
                 }}
               >
                 下一章
