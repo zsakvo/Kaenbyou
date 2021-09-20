@@ -132,7 +132,7 @@ export default defineComponent({
         hooks.on('click', onScrollClick);
       });
     });
-    return { state, scrollWrapper, tipText, finishPullDown, finishPullUp };
+    return { state, scrollWrapper, tipText, finishPullDown, finishPullUp, store };
   },
   render() {
     return (
@@ -244,11 +244,16 @@ export default defineComponent({
               class="pullup-tips"
               style={{
                 textAlign: 'center',
-                color: 'var(--van-gray-8)',
-                fontSize: '14px',
+                color: 'var(--van-gray-7)',
+                fontSize: '13px',
                 display: 'flex',
                 padding: '8px 0',
-                border: '1px solid #cfae4a2e'
+                border: '1px solid #cfae4a2e',
+                marginBottom: '16px'
+              }}
+              onClick={(e) => {
+                console.log(e);
+                this.store.commit('reader/showCatalog');
               }}
             >
               <div
@@ -264,7 +269,12 @@ export default defineComponent({
                 style={{
                   flex: 1,
                   textAlign: 'center',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  borderLeft: '1px solid rgba(207, 174, 74, 0.18)',
+                  borderRight: '1px solid rgba(207, 174, 74, 0.18)'
+                }}
+                onClick={() => {
+                  this.store.state.reader.showCatalog;
                 }}
               >
                 目录
@@ -280,6 +290,12 @@ export default defineComponent({
               </div>
             </div>
           </div>
+          <div
+            style={{
+              width: '100%',
+              height: '24px'
+            }}
+          ></div>
         </div>
       </div>
     );
