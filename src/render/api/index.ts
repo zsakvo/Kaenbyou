@@ -86,3 +86,11 @@ export const getIndexInfo = async () => {
 export const getInfoById = async (book_id: string) => {
   return get('/book/get_info_by_id', { book_id });
 };
+
+/**
+ * 获取吐槽数量
+ * @param {string} chapter_id - 章节id
+ */
+export const getTsukkomiNum = async (chapter_id: string) => {
+  return get('/chapter/get_tsukkomi_num', { chapter_id });
+};

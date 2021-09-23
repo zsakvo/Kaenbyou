@@ -192,6 +192,55 @@ export default defineComponent({
                 }}
               >
                 {c}
+                <span
+                  class="review-count"
+                  data-segid="4"
+                  style={{
+                    fontSize: '12px',
+                    lineHeight: '12px',
+                    position: 'relative',
+                    zIndex: 1,
+                    display: 'inline-block',
+                    minWidth: '24px',
+                    height: '12px',
+                    marginLeft: '12px',
+                    textAlign: 'center',
+                    verticalAlign: '1px',
+                    color: '#999',
+                    border: '1px solid #999',
+                    borderRadius: '2px'
+                  }}
+                >
+                  3
+                  <i
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '-5px',
+                      width: 0,
+                      height: 0,
+                      marginTop: '-3px',
+                      borderTop: '3px solid transparent',
+                      borderRight: '4px solid #999',
+                      borderBottom: '3px solid transparent',
+                      borderLeft: '0 none'
+                    }}
+                  >
+                    <cite
+                      style={{
+                        position: 'absolute',
+                        top: '-3px',
+                        left: '1px',
+                        width: 0,
+                        height: 0,
+                        borderTop: '3px solid transparent',
+                        borderRight: '4px solid #f6f1e7',
+                        borderBottom: '3px solid transparent',
+                        borderLeft: '0 none'
+                      }}
+                    ></cite>
+                  </i>
+                </span>
               </div>
             ))}
             {this.authorSay ? (
