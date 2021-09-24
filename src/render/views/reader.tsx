@@ -5,7 +5,7 @@ import themeConfig from '@/plugins/themes';
 
 import { useRoute, useRouter } from 'vue-router';
 import styles from '@/style/reader.module.scss';
-import { getChapterByDivisionId, getContent, getDivisionList } from '@/api';
+import { getChapterByDivisionId, getContent, getDivisionList, getTsukkomiNum } from '@/api';
 
 import arrowLeftIcon from '@/assets/imgs/arrow_left.png';
 import arrowRightIcon from '@/assets/imgs/arrow_right.png';
@@ -127,6 +127,9 @@ export default defineComponent({
       state.content = res.chapter_info.txt_content;
       state.authorSay = res.chapter_info.author_say;
       state.chapterIndex = state.chapters.findIndex((item) => item.chapter_id === cid);
+      //获取间贴
+      const tsukkomiRes = await getTsukkomiNum(cid);
+      console.log(tsukkomiRes);
     };
     const popupHandler = () => {
       const lastCanPopup = state.canPopup;
