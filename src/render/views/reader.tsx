@@ -41,6 +41,7 @@ export default defineComponent({
       cmd: '',
       title: '',
       content: '',
+      tsukkomi: [],
       authorSay: '',
       bookName: '',
       chapters: [] as any,
@@ -128,8 +129,8 @@ export default defineComponent({
       state.authorSay = res.chapter_info.author_say;
       state.chapterIndex = state.chapters.findIndex((item) => item.chapter_id === cid);
       //获取间贴
-      const tsukkomiRes = await getTsukkomiNum(cid);
-      console.log(tsukkomiRes);
+      const tsukkomiRes: any = await getTsukkomiNum(cid);
+      state.tsukkomi = tsukkomiRes.tsukkomi_num_info;
     };
     const popupHandler = () => {
       const lastCanPopup = state.canPopup;
@@ -249,6 +250,7 @@ export default defineComponent({
             authorSay={this.state.authorSay}
             onPullDown={this.loadPrevCpt}
             onPullOn={this.loadNextCpt}
+            tsukkomi={this.state.tsukkomi}
             ref="contentEle"
             // showPopup={() => {
             //   console.log('切换 popup');

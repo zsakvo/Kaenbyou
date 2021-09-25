@@ -20,6 +20,10 @@ export default defineComponent({
       type: String,
       default: ''
     },
+    tsukkomi: {
+      type: Array,
+      default: () => []
+    },
     authorSay: {
       type: String,
       default: null
