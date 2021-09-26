@@ -40,8 +40,8 @@ export default defineComponent({
       divisionList: [],
       cmd: '',
       title: '',
-      content: '',
-      tsukkomi: [],
+      content: [],
+      titleTsukkomi: '',
       authorSay: '',
       bookName: '',
       chapters: [] as any,
@@ -129,9 +129,16 @@ export default defineComponent({
       state.chapterIndex = state.chapters.findIndex((item) => item.chapter_id === cid);
       //获取间贴
       const tsukkomiRes: any = await getTsukkomiNum(cid);
-      state.tsukkomi = tsukkomiRes.tsukkomi_num_info;
-      state.content = res.chapter_info.txt_content;
-      console.log(state.tsukkomi);
+      // state.tsukkomi = tsukkomiRes.tsukkomi_num_info;
+      // state.content = res.chapter_info.txt_content;
+      state.titleTsukkomi = tsukkomiRes.tsukkomi_num_info[0]['tsukkomi_num'];
+      state.content = res.chapter_info.txt_content.split('\n').map((r, i) => {
+        return {
+          txt: r,
+          ...tsukkomiRes.tsukkomi_num_info[i + 1]
+        };
+      });
+      console.log(state.content);
     };
     const popupHandler = () => {
       const lastCanPopup = state.canPopup;
@@ -248,10 +255,10 @@ export default defineComponent({
           <Content
             title={this.state.title}
             content={this.state.content}
+            titleTsukkomi={this.state.titleTsukkomi}
             authorSay={this.state.authorSay}
             onPullDown={this.loadPrevCpt}
             onPullOn={this.loadNextCpt}
-            tsukkomi={this.state.tsukkomi}
             ref="contentEle"
             // showPopup={() => {
             //   console.log('切换 popup');

@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, reactive, nextTick, ref, PropType, toRaw } from 'vue';
+import { defineComponent, onMounted, reactive, nextTick, ref, PropType } from 'vue';
 import { PullRefresh } from 'vant';
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
@@ -17,12 +17,12 @@ export default defineComponent({
       default: ''
     },
     content: {
-      type: String,
-      default: ''
-    },
-    tsukkomi: {
       type: Array as PropType<Array<any>>,
       default: () => []
+    },
+    titleTsukkomi: {
+      type: String,
+      default: ''
     },
     authorSay: {
       type: String,
@@ -178,6 +178,55 @@ export default defineComponent({
             }}
           >
             {this.title}
+            <span
+              class="review-count"
+              data-segid="4"
+              style={{
+                fontSize: '12px',
+                lineHeight: '12px',
+                position: 'relative',
+                zIndex: 1,
+                display: 'inline-block',
+                minWidth: '24px',
+                height: '12px',
+                marginLeft: '12px',
+                textAlign: 'center',
+                verticalAlign: '1px',
+                color: '#999',
+                border: '1px solid #999',
+                borderRadius: '2px'
+              }}
+            >
+              {this.titleTsukkomi}
+              <i
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '-5px',
+                  width: 0,
+                  height: 0,
+                  marginTop: '-3px',
+                  borderTop: '3px solid transparent',
+                  borderRight: '4px solid #999',
+                  borderBottom: '3px solid transparent',
+                  borderLeft: '0 none'
+                }}
+              >
+                <cite
+                  style={{
+                    position: 'absolute',
+                    top: '-3px',
+                    left: '1px',
+                    width: 0,
+                    height: 0,
+                    borderTop: '3px solid transparent',
+                    borderRight: '4px solid #f6f1e7',
+                    borderBottom: '3px solid transparent',
+                    borderLeft: '0 none'
+                  }}
+                ></cite>
+              </i>
+            </span>
           </div>
           <div
             style={{
@@ -187,7 +236,7 @@ export default defineComponent({
               lineHeight: '1.6'
             }}
           >
-            {this.content.split('\n').map((c, i) => (
+            {this.content.map((c) => (
               <div
                 style={{
                   margin: '8px 0',
@@ -195,7 +244,7 @@ export default defineComponent({
                   wordWrap: 'break-word'
                 }}
               >
-                {c}
+                {c['txt']}
                 <span
                   class="review-count"
                   data-segid="4"
@@ -215,7 +264,7 @@ export default defineComponent({
                     borderRadius: '2px'
                   }}
                 >
-                  {toRaw(this.tsukkomi)[i].tsukkomi_num}
+                  {c['tsukkomi_num']}
                   <i
                     style={{
                       position: 'absolute',
