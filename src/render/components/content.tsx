@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, reactive, nextTick, ref } from 'vue';
+import { defineComponent, onMounted, reactive, nextTick, ref, PropType, toRaw } from 'vue';
 import { PullRefresh } from 'vant';
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
@@ -21,7 +21,7 @@ export default defineComponent({
       default: ''
     },
     tsukkomi: {
-      type: Array,
+      type: Array as PropType<Array<any>>,
       default: () => []
     },
     authorSay: {
@@ -187,7 +187,7 @@ export default defineComponent({
               lineHeight: '1.6'
             }}
           >
-            {this.content.split('\n').map((c) => (
+            {this.content.split('\n').map((c, i) => (
               <div
                 style={{
                   margin: '8px 0',
@@ -215,7 +215,7 @@ export default defineComponent({
                     borderRadius: '2px'
                   }}
                 >
-                  3
+                  {toRaw(this.tsukkomi)[i].tsukkomi_num}
                   <i
                     style={{
                       position: 'absolute',

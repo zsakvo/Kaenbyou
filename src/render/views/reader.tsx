@@ -125,12 +125,13 @@ export default defineComponent({
     const fetchContent = async (cid) => {
       const res = await getContent(cid, state.bid);
       state.title = res.chapter_info.chapter_title;
-      state.content = res.chapter_info.txt_content;
       state.authorSay = res.chapter_info.author_say;
       state.chapterIndex = state.chapters.findIndex((item) => item.chapter_id === cid);
       //获取间贴
       const tsukkomiRes: any = await getTsukkomiNum(cid);
       state.tsukkomi = tsukkomiRes.tsukkomi_num_info;
+      state.content = res.chapter_info.txt_content;
+      console.log(state.tsukkomi);
     };
     const popupHandler = () => {
       const lastCanPopup = state.canPopup;
