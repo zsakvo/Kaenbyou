@@ -131,11 +131,13 @@ export default defineComponent({
       const tsukkomiRes: any = await getTsukkomiNum(cid);
       // state.tsukkomi = tsukkomiRes.tsukkomi_num_info;
       // state.content = res.chapter_info.txt_content;
-      state.titleTsukkomi = tsukkomiRes.tsukkomi_num_info[0]['tsukkomi_num'];
+      state.titleTsukkomi = tsukkomiRes.tsukkomi_num_info.find((o) => o.paragraph_index == 0)[
+        'tsukkomi_num'
+      ];
       state.content = res.chapter_info.txt_content.split('\n').map((r, i) => {
         return {
           txt: r,
-          ...tsukkomiRes.tsukkomi_num_info[i + 1]
+          ...(tsukkomiRes.tsukkomi_num_info.find((o) => o.paragraph_index == i + 1) || {})
         };
       });
       console.log(state.content);

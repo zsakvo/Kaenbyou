@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, reactive, nextTick, ref, PropType } from 'vue';
+import { defineComponent, onMounted, reactive, nextTick, ref, PropType, onUpdated } from 'vue';
 import { PullRefresh } from 'vant';
 import BScroll from '@better-scroll/core';
 import ScrollBar from '@better-scroll/scroll-bar';
@@ -109,19 +109,24 @@ export default defineComponent({
       state.loading = false;
     };
     onMounted(() => {
+      console.log('已挂载');
+    });
+    onUpdated(() => {
       nextTick().then(() => {
-        scroll = new BScroll(scrollWrapper.value as any, {
-          scrollY: true,
-          click: true,
-          scrollbar: true,
-          // pullUpLoad: {
-          //   threshold: -96
-          // },
-          pullDownRefresh: {
-            threshold: 72,
-            stop: 45
-          }
-        });
+        !scroll
+          ? (scroll = new BScroll(scrollWrapper.value as any, {
+              scrollY: true,
+              click: true,
+              scrollbar: true,
+              // pullUpLoad: {
+              //   threshold: -96
+              // },
+              pullDownRefresh: {
+                threshold: 72,
+                stop: 45
+              }
+            }))
+          : scroll.refresh();
         // scroll.on('pullingDown', pullingDownHandler);
         // scroll.on('pullingUp', pullingUpHandler);
         // scroll.on('scrollEnd', () => {});
@@ -178,55 +183,57 @@ export default defineComponent({
             }}
           >
             {this.title}
-            <span
-              class="review-count"
-              data-segid="4"
-              style={{
-                fontSize: '12px',
-                lineHeight: '12px',
-                position: 'relative',
-                zIndex: 1,
-                display: 'inline-block',
-                minWidth: '24px',
-                height: '12px',
-                marginLeft: '12px',
-                textAlign: 'center',
-                verticalAlign: '1px',
-                color: '#999',
-                border: '1px solid #999',
-                borderRadius: '2px'
-              }}
-            >
-              {this.titleTsukkomi}
-              <i
+            {this.titleTsukkomi ? (
+              <span
+                class="review-count"
+                data-segid="4"
                 style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '-5px',
-                  width: 0,
-                  height: 0,
-                  marginTop: '-3px',
-                  borderTop: '3px solid transparent',
-                  borderRight: '4px solid #999',
-                  borderBottom: '3px solid transparent',
-                  borderLeft: '0 none'
+                  fontSize: '12px',
+                  lineHeight: '12px',
+                  position: 'relative',
+                  zIndex: 1,
+                  display: 'inline-block',
+                  minWidth: '24px',
+                  height: '12px',
+                  marginLeft: '12px',
+                  textAlign: 'center',
+                  verticalAlign: '1px',
+                  color: '#999',
+                  border: '1px solid #999',
+                  borderRadius: '2px'
                 }}
               >
-                <cite
+                {this.titleTsukkomi}
+                <i
                   style={{
                     position: 'absolute',
-                    top: '-3px',
-                    left: '1px',
+                    top: '50%',
+                    left: '-5px',
                     width: 0,
                     height: 0,
+                    marginTop: '-3px',
                     borderTop: '3px solid transparent',
-                    borderRight: '4px solid #f6f1e7',
+                    borderRight: '4px solid #999',
                     borderBottom: '3px solid transparent',
                     borderLeft: '0 none'
                   }}
-                ></cite>
-              </i>
-            </span>
+                >
+                  <cite
+                    style={{
+                      position: 'absolute',
+                      top: '-3px',
+                      left: '1px',
+                      width: 0,
+                      height: 0,
+                      borderTop: '3px solid transparent',
+                      borderRight: '4px solid #f6f1e7',
+                      borderBottom: '3px solid transparent',
+                      borderLeft: '0 none'
+                    }}
+                  ></cite>
+                </i>
+              </span>
+            ) : null}
           </div>
           <div
             style={{
@@ -245,55 +252,57 @@ export default defineComponent({
                 }}
               >
                 {c['txt']}
-                <span
-                  class="review-count"
-                  data-segid="4"
-                  style={{
-                    fontSize: '12px',
-                    lineHeight: '12px',
-                    position: 'relative',
-                    zIndex: 1,
-                    display: 'inline-block',
-                    minWidth: '24px',
-                    height: '12px',
-                    marginLeft: '12px',
-                    textAlign: 'center',
-                    verticalAlign: '1px',
-                    color: '#999',
-                    border: '1px solid #999',
-                    borderRadius: '2px'
-                  }}
-                >
-                  {c['tsukkomi_num']}
-                  <i
+                {c['tsukkomi_num'] ? (
+                  <span
+                    class="review-count"
+                    data-segid="4"
                     style={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '-5px',
-                      width: 0,
-                      height: 0,
-                      marginTop: '-3px',
-                      borderTop: '3px solid transparent',
-                      borderRight: '4px solid #999',
-                      borderBottom: '3px solid transparent',
-                      borderLeft: '0 none'
+                      fontSize: '12px',
+                      lineHeight: '12px',
+                      position: 'relative',
+                      zIndex: 1,
+                      display: 'inline-block',
+                      minWidth: '24px',
+                      height: '12px',
+                      marginLeft: '12px',
+                      textAlign: 'center',
+                      verticalAlign: '1px',
+                      color: '#999',
+                      border: '1px solid #999',
+                      borderRadius: '2px'
                     }}
                   >
-                    <cite
+                    {c['tsukkomi_num']}
+                    <i
                       style={{
                         position: 'absolute',
-                        top: '-3px',
-                        left: '1px',
+                        top: '50%',
+                        left: '-5px',
                         width: 0,
                         height: 0,
+                        marginTop: '-3px',
                         borderTop: '3px solid transparent',
-                        borderRight: '4px solid #f6f1e7',
+                        borderRight: '4px solid #999',
                         borderBottom: '3px solid transparent',
                         borderLeft: '0 none'
                       }}
-                    ></cite>
-                  </i>
-                </span>
+                    >
+                      <cite
+                        style={{
+                          position: 'absolute',
+                          top: '-3px',
+                          left: '1px',
+                          width: 0,
+                          height: 0,
+                          borderTop: '3px solid transparent',
+                          borderRight: '4px solid #f6f1e7',
+                          borderBottom: '3px solid transparent',
+                          borderLeft: '0 none'
+                        }}
+                      ></cite>
+                    </i>
+                  </span>
+                ) : null}
               </div>
             ))}
             {this.authorSay ? (
