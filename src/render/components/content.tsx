@@ -113,32 +113,34 @@ export default defineComponent({
     });
     onUpdated(() => {
       nextTick().then(() => {
-        !scroll
-          ? (scroll = new BScroll(scrollWrapper.value as any, {
-              scrollY: true,
-              click: true,
-              scrollbar: true,
-              // pullUpLoad: {
-              //   threshold: -96
-              // },
-              pullDownRefresh: {
-                threshold: 72,
-                stop: 45
-              }
-            }))
-          : scroll.refresh();
-        // scroll.on('pullingDown', pullingDownHandler);
-        // scroll.on('pullingUp', pullingUpHandler);
-        // scroll.on('scrollEnd', () => {});
-        // v2.4.0 supported
-        scroll.on('enterThreshold', () => {
-          setTipText(PHASE.moving.enter);
-        });
-        scroll.on('leaveThreshold', () => {
-          setTipText(PHASE.moving.leave);
-        });
-        const hooks = scroll.scroller.actionsHandler.hooks;
-        hooks.on('click', onScrollClick);
+        if (!scroll) {
+          scroll = new BScroll(scrollWrapper.value as any, {
+            scrollY: true,
+            click: true,
+            scrollbar: true,
+            // pullUpLoad: {
+            //   threshold: -96
+            // },
+            pullDownRefresh: {
+              threshold: 72,
+              stop: 45
+            }
+          });
+          // scroll.on('pullingDown', pullingDownHandler);
+          // scroll.on('pullingUp', pullingUpHandler);
+          // scroll.on('scrollEnd', () => {});
+          // v2.4.0 supported
+          scroll.on('enterThreshold', () => {
+            setTipText(PHASE.moving.enter);
+          });
+          scroll.on('leaveThreshold', () => {
+            setTipText(PHASE.moving.leave);
+          });
+          const hooks = scroll.scroller.actionsHandler.hooks;
+          hooks.on('click', onScrollClick);
+        } else {
+          scroll.refresh();
+        }
       });
     });
     return { state, scrollWrapper, tipText, finishPullDown, finishPullUp, store };
