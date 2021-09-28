@@ -258,6 +258,9 @@ export default defineComponent({
                   <span
                     class="review-count"
                     data-segid="4"
+                    onClick={() => {
+                      console.log(2333);
+                    }}
                     style={{
                       fontSize: '12px',
                       lineHeight: '12px',

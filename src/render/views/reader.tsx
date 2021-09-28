@@ -17,9 +17,6 @@ import readerSettingsIcon from '@/assets/imgs/read_settings.png';
 import dayjs from 'dayjs';
 import { useStore } from 'vuex';
 
-import BScroll from '@better-scroll/core';
-import ScrollBar from '@better-scroll/scroll-bar';
-
 export default defineComponent({
   components: {
     Content,
@@ -33,7 +30,6 @@ export default defineComponent({
     const store = useStore();
     const catalogWrapper = ref(null);
     const contentEle = ref(null as any);
-    BScroll.use(ScrollBar);
     const state = reactive({
       bid: '',
       cid: '',
@@ -105,12 +101,6 @@ export default defineComponent({
     onUnmounted(() => {
       clearInterval();
     });
-    const initScroll = () => {
-      new BScroll(catalogWrapper.value as any, {
-        scrollY: true,
-        scrollbar: true
-      });
-    };
     const getChapters = async (book_id: any) => {
       const res: any = await getDivisionList(book_id);
       const divisions = res.division_list;
@@ -120,7 +110,6 @@ export default defineComponent({
         state.chapters = state.chapters.concat(res.chapter_list);
       }
       await nextTick();
-      initScroll();
     };
     const fetchContent = async (cid) => {
       const res = await getContent(cid, state.bid);
