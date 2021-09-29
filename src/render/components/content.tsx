@@ -51,9 +51,9 @@ export default defineComponent({
     BScroll.use(Pullup);
     let scroll;
     const onScrollClick = (e: IMouseEvent) => {
-      if (!e._constructed) {
-        return;
-      }
+      // if (!e._constructed) {
+      //   return;
+      // }
       const { innerWidth, innerHeight } = window;
       const { x, y } = e;
       console.log(x, y);
