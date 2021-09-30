@@ -360,7 +360,7 @@ export default defineComponent({
               class="pullup-tips"
               style={{
                 textAlign: 'center',
-                color: 'var(--van-gray-7)',
+                color: 'rgb(105, 85, 22)',
                 fontSize: '13px',
                 display: 'flex',
                 padding: '8px 0',
