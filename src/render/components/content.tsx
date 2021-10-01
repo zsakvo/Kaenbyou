@@ -259,7 +259,7 @@ export default defineComponent({
                     class="review-count"
                     data-segid="4"
                     onClick={() => {
-                      console.log(2333);
+                      console.log('当前段落：' + c.paragraph_index);
                     }}
                     style={{
                       fontSize: '12px',
