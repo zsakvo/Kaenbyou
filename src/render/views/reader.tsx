@@ -1,6 +1,6 @@
 import { computed, defineComponent, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { Popup, Icon, Loading } from 'vant';
-import Content from '@/components/Content';
+import Content from '@/component/content';
 import themeConfig from '@/plugins/themes';
 
 import { useRoute, useRouter } from 'vue-router';
@@ -46,6 +46,7 @@ export default defineComponent({
       showBottomPopup: false,
       canPopup: true,
       now: dayjs(),
+      showTsukkomi: false,
       showPopup: computed(() => store.state.reader.showPopup),
       showCatalog: computed(() => store.state.reader.showCatalog)
     });
@@ -191,6 +192,10 @@ export default defineComponent({
         jumpChapter(state.chapters[state.chapterIndex].chapter_id);
       }
     };
+    const showTsukkomi = () => {
+      console.log('显示间贴……');
+      state.showTsukkomi = true;
+    };
     return {
       state,
       icons,
@@ -205,7 +210,8 @@ export default defineComponent({
       catalogWrapper,
       contentEle,
       loadPrevCpt,
-      loadNextCpt
+      loadNextCpt,
+      showTsukkomi
     };
   },
   render() {
@@ -289,7 +295,7 @@ export default defineComponent({
           </div>
           <div class={styles.secLine}>
             <img src={this.icons.menuIcon} class={styles.icon} alt="" onClick={this.showCatalog} />
-            <div class={styles.readDesc}> 已读 56% </div>
+            <div class={styles.readDesc}> 已读 57% </div>
             <img src={this.icons.moonIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
             <img src={this.icons.bookmarkIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
             <img
@@ -328,6 +334,15 @@ export default defineComponent({
             </div>
           </div>
         </div>
+        <Popup
+          position="bottom"
+          show={this.state.showTsukkomi}
+          style={{
+            height: '75%'
+          }}
+        >
+          2333
+        </Popup>
       </div>
     );
   }

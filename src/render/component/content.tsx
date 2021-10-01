@@ -37,6 +37,7 @@ export default defineComponent({
       default: () => {}
     }
   },
+  emits: ['showTsukkomi'],
   setup(/*props*/) {
     const store = useStore();
     const state = reactive({
@@ -57,7 +58,7 @@ export default defineComponent({
       const { innerWidth, innerHeight } = window;
       const { x, y } = e;
       console.log(x, y);
-      console.log(innerWidth, innerHeight);
+      // console.log(innerWidth, innerHeight);
       if (store.state.reader.showPopup) {
         store.commit('reader/hidePopup');
       } else if (store.state.reader.showCatalog) {
@@ -69,8 +70,9 @@ export default defineComponent({
           y > innerHeight / 3 &&
           y <= (innerHeight * 2) / 3
         ) {
-          console.log('可以呼出菜单');
           store.commit('reader/showPopup');
+          console.log(store.state);
+          console.log('可以呼出菜单');
         }
       }
     };
@@ -258,8 +260,12 @@ export default defineComponent({
                   <span
                     class="review-count"
                     data-segid="4"
-                    onClick={() => {
+                    onClick={(e: any) => {
                       console.log('当前段落：' + c.paragraph_index);
+                      this.$emit('showTsukkomi');
+                      if (!e._constructed) {
+                        return;
+                      }
                     }}
                     style={{
                       fontSize: '12px',
