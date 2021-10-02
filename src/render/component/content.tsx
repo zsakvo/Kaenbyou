@@ -52,28 +52,33 @@ export default defineComponent({
     BScroll.use(Pullup);
     let scroll;
     const onScrollClick = (e: IMouseEvent) => {
-      // if (!e._constructed) {
-      //   return;
-      // }
+      console.log('滚动点击--->', e.toElement.nodeName);
+      if (!e._constructed) {
+        return;
+      }
       const { innerWidth, innerHeight } = window;
       const { x, y } = e;
       console.log(x, y);
       // console.log(innerWidth, innerHeight);
-      if (store.state.reader.showPopup) {
-        store.commit('reader/hidePopup');
-      } else if (store.state.reader.showCatalog) {
-        store.commit('reader/hideCatalog');
-      } else {
-        if (
-          x > innerWidth / 3 &&
-          x <= (innerWidth * 2) / 3 &&
-          y > innerHeight / 3 &&
-          y <= (innerHeight * 2) / 3
-        ) {
-          store.commit('reader/showPopup');
-          console.log(store.state);
-          console.log('可以呼出菜单');
+      if (e.toElement.nodeName !== 'SPAN') {
+        if (store.state.reader.showPopup) {
+          store.commit('reader/hidePopup');
+        } else if (store.state.reader.showCatalog) {
+          store.commit('reader/hideCatalog');
+        } else {
+          if (
+            x > innerWidth / 3 &&
+            x <= (innerWidth * 2) / 3 &&
+            y > innerHeight / 3 &&
+            y <= (innerHeight * 2) / 3
+          ) {
+            store.commit('reader/showPopup');
+            console.log(store.state);
+            console.log('可以呼出菜单');
+          }
         }
+      } else {
+        console.log('点击了span');
       }
     };
     const PHASE = {
@@ -429,4 +434,5 @@ export default defineComponent({
 
 interface IMouseEvent extends MouseEvent {
   _constructed: boolean;
+  toElement: any;
 }
