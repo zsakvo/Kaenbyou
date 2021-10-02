@@ -17,12 +17,15 @@ import readerSettingsIcon from '@/assets/imgs/read_settings.png';
 import dayjs from 'dayjs';
 import { useStore } from 'vuex';
 
+import Tsukkomi from '@/component/tsukkomi';
+
 export default defineComponent({
   components: {
     Content,
     [Popup.name]: Popup,
     [Icon.name]: Icon,
-    [Loading.name]: Loading
+    [Loading.name]: Loading,
+    Tsukkomi
   },
   setup() {
     const router = useRouter();
@@ -46,7 +49,7 @@ export default defineComponent({
       showBottomPopup: false,
       canPopup: true,
       now: dayjs(),
-      showTsukkomi: false,
+      showTsukkomi: computed(() => store.state.reader.showTsukkomi),
       showPopup: computed(() => store.state.reader.showPopup),
       showCatalog: computed(() => store.state.reader.showCatalog)
     });
@@ -113,6 +116,7 @@ export default defineComponent({
       await nextTick();
     };
     const fetchContent = async (cid) => {
+      store.commit('reader/setCid', cid);
       const res = await getContent(cid, state.bid);
       state.title = res.chapter_info.chapter_title;
       state.authorSay = res.chapter_info.author_say;
@@ -192,9 +196,8 @@ export default defineComponent({
         jumpChapter(state.chapters[state.chapterIndex].chapter_id);
       }
     };
-    const showTsukkomi = () => {
-      console.log('显示间贴……');
-      state.showTsukkomi = true;
+    const closeTsukkomi = () => {
+      store.commit('reader/hideTsukkomi');
     };
     return {
       state,
@@ -211,7 +214,7 @@ export default defineComponent({
       contentEle,
       loadPrevCpt,
       loadNextCpt,
-      showTsukkomi
+      closeTsukkomi
     };
   },
   render() {
@@ -336,12 +339,19 @@ export default defineComponent({
         </div>
         <Popup
           position="bottom"
+          closeable={true}
+          closeIconPosition="top-left"
+          round={true}
           show={this.state.showTsukkomi}
           style={{
-            height: '75%'
+            height: '86%'
+          }}
+          onClose={() => {
+            console.log('准备关闭间贴弹窗');
+            this.closeTsukkomi();
           }}
         >
-          2333
+          <Tsukkomi />
         </Popup>
       </div>
     );

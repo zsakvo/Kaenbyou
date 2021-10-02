@@ -37,7 +37,6 @@ export default defineComponent({
       default: () => {}
     }
   },
-  emits: ['showTsukkomi'],
   setup(/*props*/) {
     const store = useStore();
     const state = reactive({
@@ -267,7 +266,10 @@ export default defineComponent({
                     data-segid="4"
                     onClick={(e: any) => {
                       console.log('当前段落：' + c.paragraph_index);
-                      this.$emit('showTsukkomi');
+                      this.store.dispatch('reader/getTsukkomi', {
+                        pid: c.paragraph_index,
+                        pTxt: '原文：' + c['txt'].trim()
+                      });
                       if (!e._constructed) {
                         return;
                       }
