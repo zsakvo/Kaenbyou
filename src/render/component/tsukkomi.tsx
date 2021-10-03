@@ -7,10 +7,10 @@ import { Itsukkomi } from 'src/typings/interface';
 
 export default defineComponent({
   name: 'Tsukkomi',
-  props: {},
   components: {
     [Icon.name]: Icon
   },
+  props: {},
   setup() {
     const store = useStore();
     const state = reactive({
@@ -31,7 +31,12 @@ export default defineComponent({
             return (
               <div class={styles.tsukkomi}>
                 <div class={styles.avatar}>
-                  <img src={tsukkomi.reader_info.avatar_thumb_url} />
+                  <img
+                    src={
+                      tsukkomi.reader_info.avatar_thumb_url ||
+                      'https://pic1.zhimg.com/da8e974dc_xll.jpg'
+                    }
+                  />
                 </div>
                 <div class={styles.textWrapper}>
                   <div class={styles.userName}>{tsukkomi.reader_info.reader_name}</div>
