@@ -100,6 +100,7 @@ export default defineComponent({
         state.now = dayjs();
       }, 1000 * 60);
       await getChapters(state.bid);
+      if (state.cid === '0') state.cid = state.chapters[0].chapter_id;
       fetchContent(state.cid);
     });
     onUnmounted(() => {
@@ -125,9 +126,9 @@ export default defineComponent({
       const tsukkomiRes: any = await getTsukkomiNum(cid);
       // state.tsukkomi = tsukkomiRes.tsukkomi_num_info;
       // state.content = res.chapter_info.txt_content;
-      state.titleTsukkomi = tsukkomiRes.tsukkomi_num_info.find((o) => o.paragraph_index == 0)[
-        'tsukkomi_num'
-      ];
+      state.titleTsukkomi = tsukkomiRes.tsukkomi_num_info.find((o) => o.paragraph_index == 0)
+        ? tsukkomiRes.tsukkomi_num_info.find((o) => o.paragraph_index == 0)['tsukkomi_num']
+        : null;
       state.content = res.chapter_info.txt_content.split('\n').map((r, i) => {
         return {
           txt: r,
