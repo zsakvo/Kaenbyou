@@ -195,6 +195,16 @@ export default defineComponent({
               <span
                 class="review-count"
                 data-segid="4"
+                onClick={(e: any) => {
+                  console.log('当前段落：标题');
+                  this.store.dispatch('reader/getTsukkomi', {
+                    pid: 0,
+                    pTxt: '原文：' + this.title.trim()
+                  });
+                  if (!e._constructed) {
+                    return;
+                  }
+                }}
                 style={{
                   fontSize: '12px',
                   lineHeight: '12px',
