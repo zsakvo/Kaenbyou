@@ -1,4 +1,4 @@
-# CirnoElectron
+# Kaenbyou
 
 基于 vue3，使用 electron 构建的非官方版某小说网站 PC 客户端
 
