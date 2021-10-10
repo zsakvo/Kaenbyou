@@ -94,3 +94,24 @@ export const getInfoById = async (book_id: string) => {
 export const getTsukkomiNum = async (chapter_id: string) => {
   return get('/chapter/get_tsukkomi_num', { chapter_id });
 };
+
+/**
+ * 获取吐槽列表
+ * @param chapter_id 章节 id
+ * @param paragraph_index 段落 id
+ * @param page 页码
+ * @param count 每页数目
+ */
+export const getTsukkomiList = async (
+  chapter_id: string,
+  paragraph_index: number,
+  page: number,
+  count = 20
+) => {
+  return get('/chapter/get_paragraph_tsukkomi_list_new', {
+    chapter_id,
+    paragraph_index,
+    page,
+    count
+  });
+};

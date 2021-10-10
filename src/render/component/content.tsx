@@ -51,27 +51,33 @@ export default defineComponent({
     BScroll.use(Pullup);
     let scroll;
     const onScrollClick = (e: IMouseEvent) => {
-      // if (!e._constructed) {
-      //   return;
-      // }
+      console.log('滚动点击--->', e.toElement.nodeName);
+      if (!e._constructed) {
+        return;
+      }
       const { innerWidth, innerHeight } = window;
       const { x, y } = e;
       console.log(x, y);
-      console.log(innerWidth, innerHeight);
-      if (store.state.reader.showPopup) {
-        store.commit('reader/hidePopup');
-      } else if (store.state.reader.showCatalog) {
-        store.commit('reader/hideCatalog');
-      } else {
-        if (
-          x > innerWidth / 3 &&
-          x <= (innerWidth * 2) / 3 &&
-          y > innerHeight / 3 &&
-          y <= (innerHeight * 2) / 3
-        ) {
-          console.log('可以呼出菜单');
-          store.commit('reader/showPopup');
+      // console.log(innerWidth, innerHeight);
+      if (e.toElement.nodeName !== 'SPAN') {
+        if (store.state.reader.showPopup) {
+          store.commit('reader/hidePopup');
+        } else if (store.state.reader.showCatalog) {
+          store.commit('reader/hideCatalog');
+        } else {
+          if (
+            x > innerWidth / 3 &&
+            x <= (innerWidth * 2) / 3 &&
+            y > innerHeight / 3 &&
+            y <= (innerHeight * 2) / 3
+          ) {
+            store.commit('reader/showPopup');
+            console.log(store.state);
+            console.log('可以呼出菜单');
+          }
         }
+      } else {
+        console.log('点击了span');
       }
     };
     const PHASE = {
@@ -189,6 +195,16 @@ export default defineComponent({
               <span
                 class="review-count"
                 data-segid="4"
+                onClick={(e: any) => {
+                  console.log('当前段落：标题');
+                  this.store.dispatch('reader/getTsukkomi', {
+                    pid: 0,
+                    pTxt: '原文：' + this.title.trim()
+                  });
+                  if (!e._constructed) {
+                    return;
+                  }
+                }}
                 style={{
                   fontSize: '12px',
                   lineHeight: '12px',
@@ -258,8 +274,15 @@ export default defineComponent({
                   <span
                     class="review-count"
                     data-segid="4"
-                    onClick={() => {
-                      console.log(2333);
+                    onClick={(e: any) => {
+                      console.log('当前段落：' + c.paragraph_index);
+                      this.store.dispatch('reader/getTsukkomi', {
+                        pid: c.paragraph_index,
+                        pTxt: '原文：' + c['txt'].trim()
+                      });
+                      if (!e._constructed) {
+                        return;
+                      }
                     }}
                     style={{
                       fontSize: '12px',
@@ -360,7 +383,7 @@ export default defineComponent({
               class="pullup-tips"
               style={{
                 textAlign: 'center',
-                color: 'var(--van-gray-7)',
+                color: 'rgb(105, 85, 22)',
                 fontSize: '13px',
                 display: 'flex',
                 padding: '8px 0',
@@ -423,4 +446,5 @@ export default defineComponent({
 
 interface IMouseEvent extends MouseEvent {
   _constructed: boolean;
+  toElement: any;
 }

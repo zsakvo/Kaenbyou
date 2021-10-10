@@ -1,6 +1,6 @@
 import { computed, defineComponent, nextTick, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { Popup, Icon, Loading } from 'vant';
-import Content from '@/components/Content';
+import Content from '@/component/content';
 import themeConfig from '@/plugins/themes';
 
 import { useRoute, useRouter } from 'vue-router';
@@ -17,12 +17,15 @@ import readerSettingsIcon from '@/assets/imgs/read_settings.png';
 import dayjs from 'dayjs';
 import { useStore } from 'vuex';
 
+import Tsukkomi from '@/component/tsukkomi';
+
 export default defineComponent({
   components: {
     Content,
     [Popup.name]: Popup,
     [Icon.name]: Icon,
-    [Loading.name]: Loading
+    [Loading.name]: Loading,
+    Tsukkomi
   },
   setup() {
     const router = useRouter();
@@ -46,6 +49,7 @@ export default defineComponent({
       showBottomPopup: false,
       canPopup: true,
       now: dayjs(),
+      showTsukkomi: computed(() => store.state.reader.showTsukkomi),
       showPopup: computed(() => store.state.reader.showPopup),
       showCatalog: computed(() => store.state.reader.showCatalog)
     });
@@ -96,6 +100,7 @@ export default defineComponent({
         state.now = dayjs();
       }, 1000 * 60);
       await getChapters(state.bid);
+      if (state.cid === '0') state.cid = state.chapters[0].chapter_id;
       fetchContent(state.cid);
     });
     onUnmounted(() => {
@@ -112,6 +117,7 @@ export default defineComponent({
       await nextTick();
     };
     const fetchContent = async (cid) => {
+      store.commit('reader/setCid', cid);
       const res = await getContent(cid, state.bid);
       state.title = res.chapter_info.chapter_title;
       state.authorSay = res.chapter_info.author_say;
@@ -120,9 +126,9 @@ export default defineComponent({
       const tsukkomiRes: any = await getTsukkomiNum(cid);
       // state.tsukkomi = tsukkomiRes.tsukkomi_num_info;
       // state.content = res.chapter_info.txt_content;
-      state.titleTsukkomi = tsukkomiRes.tsukkomi_num_info.find((o) => o.paragraph_index == 0)[
-        'tsukkomi_num'
-      ];
+      state.titleTsukkomi = tsukkomiRes.tsukkomi_num_info.find((o) => o.paragraph_index == 0)
+        ? tsukkomiRes.tsukkomi_num_info.find((o) => o.paragraph_index == 0)['tsukkomi_num']
+        : null;
       state.content = res.chapter_info.txt_content.split('\n').map((r, i) => {
         return {
           txt: r,
@@ -191,6 +197,9 @@ export default defineComponent({
         jumpChapter(state.chapters[state.chapterIndex].chapter_id);
       }
     };
+    const closeTsukkomi = () => {
+      store.commit('reader/hideTsukkomi');
+    };
     return {
       state,
       icons,
@@ -205,7 +214,8 @@ export default defineComponent({
       catalogWrapper,
       contentEle,
       loadPrevCpt,
-      loadNextCpt
+      loadNextCpt,
+      closeTsukkomi
     };
   },
   render() {
@@ -289,7 +299,7 @@ export default defineComponent({
           </div>
           <div class={styles.secLine}>
             <img src={this.icons.menuIcon} class={styles.icon} alt="" onClick={this.showCatalog} />
-            <div class={styles.readDesc}> 已读 56% </div>
+            <div class={styles.readDesc}> 已读 57% </div>
             <img src={this.icons.moonIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
             <img src={this.icons.bookmarkIcon} class={[styles.icon, styles.iconMLeft]} alt="" />
             <img
@@ -328,6 +338,22 @@ export default defineComponent({
             </div>
           </div>
         </div>
+        <Popup
+          position="bottom"
+          closeable={true}
+          closeIconPosition="top-left"
+          round={true}
+          show={this.state.showTsukkomi}
+          style={{
+            height: '86%'
+          }}
+          onClose={() => {
+            console.log('准备关闭间贴弹窗');
+            this.closeTsukkomi();
+          }}
+        >
+          <Tsukkomi />
+        </Popup>
       </div>
     );
   }
