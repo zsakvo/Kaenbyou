@@ -72,8 +72,9 @@
     .setting-cell {
       width: 100vw;
       margin-left: -14px;
-      :deep(.van-icon) {
-        line-height: 28px;
+      align-items: center;
+      i {
+        height: fit-content;
         margin-right: 12px;
       }
     }
