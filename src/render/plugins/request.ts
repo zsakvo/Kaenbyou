@@ -103,7 +103,8 @@ service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     popPending(config);
     pushPending(config);
-    config.params.app_version = '2.8.018';
+    config.params.app_version = '2.8.021';
+    config.params.device_token = 'ciweimao_f';
     if (config.url !== '/signup/login') {
       const token = localStorage.getItem('token');
       const account = localStorage.getItem('account');
